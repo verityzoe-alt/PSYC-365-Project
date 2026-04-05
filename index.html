@@ -19,7 +19,8 @@
         <!-- hero -->
         <section class="hero" aria-label="Paper hero">
             <div class="container hero-inner">
-                <h1 class="hero-title"><span class="highlight">Fine-Tuning the Details: </span><br>Post-encoding Music Differentially Impacts General and
+                <h1 class="hero-title"><span class="highlight">Fine-Tuning the Details: </span><br>Post-encoding Music
+                    Differentially Impacts General and
                     Detailed Memory</h1>
                 <p class="hero-subtitle">Kayla R. Clark and Stephanie L. Leal</p>
             </div>
@@ -158,6 +159,169 @@
             </div>
         </section>
 
+        <!-- experimental design timeline -->
+        <section class="design" aria-label="Experimental design">
+            <div class="design-inner">
+                <div class="design-head">
+                    <h2 class="design-heading">III. EXPERIMENTAL DESIGN</h2>
+                    <p class="design-subtitle">Click a milestone to see details.</p>
+                </div>
+
+                <div class="timeline" data-timeline>
+                    <div class="timeline-track" role="list" aria-label="Experimental design milestones">
+                        <div class="timeline-overlays">
+                            <div class="timeline-bracket timeline-bracket--music" data-overlay="music">
+                                <button class="timeline-bracket-label" type="button" data-timeline-trigger="music"
+                                    aria-expanded="false" aria-controls="timeline-panel">
+                                    Music intervention (10 min)
+                                </button>
+                            </div>
+                            <div class="timeline-bracket timeline-bracket--surveys" data-overlay="surveys">
+                                <button class="timeline-bracket-label" type="button" data-timeline-trigger="surveys"
+                                    aria-expanded="false" aria-controls="timeline-panel">
+                                    Surveys (30 min)
+                                </button>
+                            </div>
+                        </div>
+                        <button class="timeline-milestone is-top is-active" type="button" role="listitem"
+                            data-timeline-point="arrival" data-timeline-trigger="arrival" aria-expanded="true"
+                            aria-controls="timeline-panel">
+                            <span class="timeline-caption">
+                                <span class="timeline-label">Participant arrives</span>
+                            </span>
+                            <span class="timeline-dot" aria-hidden="true"></span>
+                        </button>
+
+                        <button class="timeline-milestone is-bottom" type="button" role="listitem"
+                            data-timeline-point="encoding" data-timeline-trigger="encoding" aria-expanded="false"
+                            aria-controls="timeline-panel">
+                            <span class="timeline-caption">
+                                <span class="timeline-label">Encoding phase</span>
+                            </span>
+                            <span class="timeline-dot" aria-hidden="true"></span>
+                        </button>
+
+                        <button class="timeline-milestone is-top" type="button" role="listitem"
+                            data-timeline-point="emotion1" data-timeline-trigger="emotion1" aria-expanded="false"
+                            aria-controls="timeline-panel">
+                            <span class="timeline-caption">
+                                <span class="timeline-label">Self-assessment of emotion #1</span>
+                            </span>
+                            <span class="timeline-dot" aria-hidden="true"></span>
+                        </button>
+
+                        <div class="timeline-marker timeline-marker--ghost" role="listitem" aria-hidden="true"
+                            data-timeline-point="marker35"></div>
+
+                        <div class="timeline-marker timeline-marker--ghost" role="listitem" aria-hidden="true"
+                            data-timeline-point="marker375"></div>
+
+                        <button class="timeline-milestone is-top" type="button" role="listitem"
+                            data-timeline-point="emotion2" data-timeline-trigger="emotion2" aria-expanded="false"
+                            aria-controls="timeline-panel">
+                            <span class="timeline-caption">
+                                <span class="timeline-label">Self-assessment of emotion #2</span>
+                            </span>
+                            <span class="timeline-dot" aria-hidden="true"></span>
+                        </button>
+
+                        <div class="timeline-marker timeline-marker--ghost" role="listitem" aria-hidden="true"
+                            data-timeline-point="marker5"></div>
+
+                        <div class="timeline-marker timeline-marker--ghost" role="listitem" aria-hidden="true"
+                            data-timeline-point="marker55"></div>
+
+                        <button class="timeline-milestone is-top" type="button" role="listitem"
+                            data-timeline-point="retrieval" data-timeline-trigger="retrieval" aria-expanded="false"
+                            aria-controls="timeline-panel">
+                            <span class="timeline-caption">
+                                <span class="timeline-label">Retrieval phase</span>
+                            </span>
+                            <span class="timeline-dot" aria-hidden="true"></span>
+                        </button>
+
+                        <button class="timeline-milestone is-bottom" type="button" role="listitem"
+                            data-timeline-point="musicRating" data-timeline-trigger="musicRating" aria-expanded="false"
+                            aria-controls="timeline-panel">
+                            <span class="timeline-caption">
+                                <span class="timeline-label">Music-rating task</span>
+                            </span>
+                            <span class="timeline-dot" aria-hidden="true"></span>
+                        </button>
+
+                        <button class="timeline-milestone is-top" type="button" role="listitem"
+                            data-timeline-point="finalSurveys" data-timeline-trigger="finalSurveys"
+                            aria-expanded="false" aria-controls="timeline-panel">
+                            <span class="timeline-caption">
+                                <span class="timeline-label">Surveys</span>
+                            </span>
+                            <span class="timeline-dot" aria-hidden="true"></span>
+                        </button>
+                    </div>
+
+                    <div class="timeline-panel" id="timeline-panel" role="region" aria-live="polite">
+                        <div class="timeline-detail is-active" data-timeline-panel="arrival">
+                            <h3 class="timeline-title">Participant arrives</h3>
+                            <p class="timeline-text">Participants arrive for the session and begin the study procedure.
+                            </p>
+                        </div>
+
+                        <div class="timeline-detail" data-timeline-panel="encoding" hidden>
+                            <h3 class="timeline-title">Encoding phase</h3>
+                            <p class="timeline-text">Participants complete the encoding phase of the task (initial
+                                learning).</p>
+                        </div>
+
+                        <div class="timeline-detail" data-timeline-panel="emotion1" hidden>
+                            <h3 class="timeline-title">Self-assessment of emotion #1</h3>
+                            <p class="timeline-text">Participants report their current affective state before the
+                                intervention.</p>
+                        </div>
+
+                        <div class="timeline-detail" data-timeline-panel="emotion2" hidden>
+                            <h3 class="timeline-title">Self-assessment of emotion #2</h3>
+                            <p class="timeline-text">Participants complete a second self-assessment to capture change in
+                                affect after the intervention.</p>
+                        </div>
+
+                        <div class="timeline-detail" data-timeline-panel="music" hidden>
+                            <h3 class="timeline-title">Music intervention (10 min)</h3>
+                            <p class="timeline-text">Music is presented during the post-encoding intervention period,
+                                based on the assigned condition.</p>
+                        </div>
+
+                        <div class="timeline-detail" data-timeline-panel="surveys" hidden>
+                            <h3 class="timeline-title">Surveys (30 min)</h3>
+                            <p class="timeline-text">Participants complete surveys during the post-encoding interval.
+                            </p>
+                        </div>
+
+                        <div class="timeline-detail" data-timeline-panel="retrieval" hidden>
+                            <h3 class="timeline-title">Retrieval phase</h3>
+                            <p class="timeline-text">Participants complete the retrieval phase (memory assessment)
+                                following the delay interval.</p>
+                        </div>
+
+                        <div class="timeline-detail" data-timeline-panel="musicRating" hidden>
+                            <h3 class="timeline-title">Music-rating task</h3>
+                            <p class="timeline-text">Participants complete the music-rating task.</p>
+                        </div>
+
+                        <div class="timeline-detail" data-timeline-panel="finalSurveys" hidden>
+                            <h3 class="timeline-title">Surveys</h3>
+                            <p class="timeline-text">Participants complete surveys to finish the session.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- image test -->
+        <!-- <section class="image-test" aria-label="Image test">
+            <div class="image-test-inner">
+                <img class="image-test-img" src="./img/bear1.png" alt="Test image" />
+            </div>
+        </section> -->
 
     </main>
 </body>

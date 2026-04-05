@@ -115,3 +115,18 @@
         }
     });
 })();
+
+(() => {
+    const cards = Array.from(document.querySelectorAll('[data-flip-card]'));
+    if (cards.length === 0) return;
+
+    cards.forEach((btn) => {
+        if (!(btn instanceof HTMLButtonElement)) return;
+
+        btn.addEventListener('click', () => {
+            const next = !btn.classList.contains('is-flipped');
+            btn.classList.toggle('is-flipped', next);
+            btn.setAttribute('aria-pressed', String(next));
+        });
+    });
+})();

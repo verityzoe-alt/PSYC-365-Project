@@ -452,6 +452,90 @@
 })();
 
 (() => {
+    const root = document.querySelector('[data-discussion-tabs]');
+    if (!(root instanceof HTMLElement)) return;
+
+    const tabs = Array.from(root.querySelectorAll('[data-discussion-tab]')).filter((el) => el instanceof HTMLButtonElement);
+    const panels = Array.from(root.querySelectorAll('[data-discussion-panel]')).filter((el) => el instanceof HTMLElement);
+    if (tabs.length === 0 || panels.length === 0) return;
+
+    const getKey = (el) => el.getAttribute('data-discussion-tab') || '';
+
+    let enteringTimer = 0;
+
+    const setActive = (key, { focus = false } = {}) => {
+        tabs.forEach((tab) => {
+            const isActive = getKey(tab) === key;
+            tab.classList.toggle('is-active', isActive);
+            tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            tab.tabIndex = isActive ? 0 : -1;
+            if (isActive && focus) tab.focus();
+        });
+
+        panels.forEach((panel) => {
+            const isActive = (panel.getAttribute('data-discussion-panel') || '') === key;
+            panel.hidden = !isActive;
+            panel.classList.remove('is-entering');
+        });
+
+        const activePanel = panels.find((p) => (p.getAttribute('data-discussion-panel') || '') === key);
+        if (activePanel) {
+            window.clearTimeout(enteringTimer);
+            // Re-trigger animation even when switching back.
+            activePanel.classList.add('is-entering');
+            enteringTimer = window.setTimeout(() => {
+                activePanel.classList.remove('is-entering');
+            }, 520);
+        }
+    };
+
+    // Initialize based on existing markup.
+    const initiallySelected = tabs.find((t) => t.getAttribute('aria-selected') === 'true');
+    const initialKey = initiallySelected ? getKey(initiallySelected) : getKey(tabs[0]);
+    if (initialKey) setActive(initialKey);
+
+    tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+            const key = getKey(tab);
+            if (!key) return;
+            setActive(key);
+        });
+
+        tab.addEventListener('keydown', (e) => {
+            if (!(e instanceof KeyboardEvent)) return;
+
+            const currentIndex = tabs.indexOf(tab);
+            if (currentIndex < 0) return;
+
+            const moveTo = (nextIndex) => {
+                const next = tabs[(nextIndex + tabs.length) % tabs.length];
+                if (!next) return;
+                const key = getKey(next);
+                if (!key) return;
+                setActive(key, { focus: true });
+            };
+
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                moveTo(currentIndex + 1);
+            }
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                moveTo(currentIndex - 1);
+            }
+            if (e.key === 'Home') {
+                e.preventDefault();
+                moveTo(0);
+            }
+            if (e.key === 'End') {
+                e.preventDefault();
+                moveTo(tabs.length - 1);
+            }
+        });
+    });
+})();
+
+(() => {
     const plotEl = document.getElementById('plot-r2');
     if (!(plotEl instanceof HTMLElement)) return;
     if (typeof window.Plotly === 'undefined') return;
@@ -772,8 +856,8 @@
 
 // affect grid 
 const rowData = [
-    { desc: 'High' }, {desc:''}, {desc:''}, {desc:''},
-    { desc: 'Neutral' }, {desc:''}, {desc:''}, {desc:''},
+    { desc: 'High' }, { desc: '' }, { desc: '' }, { desc: '' },
+    { desc: 'Neutral' }, { desc: '' }, { desc: '' }, { desc: '' },
     { desc: 'Low' }
 ];
 
@@ -782,39 +866,39 @@ document.getElementById('rowLabels').innerHTML = rowData
     .join('');
 
 const corners = {
-    tl:[186,110,88], tr:[188,155,72],
-    bl:[120,118,150], br:[100,155,138]
+    tl: [186, 110, 88], tr: [188, 155, 72],
+    bl: [120, 118, 150], br: [100, 155, 138]
 };
-function lerp(a,b,t){ return a+(b-a)*t }
-function lerpC(c1,c2,t){ return c1.map((v,i)=>Math.round(lerp(v,c2[i],t))) }
-function cellColor(col,row){
-    const tx=col/8, ty=row/8;
-    const top=lerpC(corners.tl,corners.tr,tx);
-    const bot=lerpC(corners.bl,corners.br,tx);
-    const [r,g,b]=lerpC(top,bot,ty);
+function lerp(a, b, t) { return a + (b - a) * t }
+function lerpC(c1, c2, t) { return c1.map((v, i) => Math.round(lerp(v, c2[i], t))) }
+function cellColor(col, row) {
+    const tx = col / 8, ty = row / 8;
+    const top = lerpC(corners.tl, corners.tr, tx);
+    const bot = lerpC(corners.bl, corners.br, tx);
+    const [r, g, b] = lerpC(top, bot, ty);
     return `rgb(${r},${g},${b})`;
 }
 
-const valenceLabels=['1 — Extremely Negative','2','3','4','5 — Neutral','6','7','8','9 — Extremely Positive'];
+const valenceLabels = ['1 — Extremely Negative', '2', '3', '4', '5 — Neutral', '6', '7', '8', '9 — Extremely Positive'];
 const tip = document.getElementById('agTip');
 const grid = document.getElementById('agGrid');
 
-for(let row=0; row<9; row++){
-    for(let col=0; col<9; col++){
+for (let row = 0; row < 9; row++) {
+    for (let col = 0; col < 9; col++) {
         const cell = document.createElement('div');
         cell.className = 'ag-cell';
         cell.style.background = cellColor(col, row);
         cell.addEventListener('mouseenter', e => {
             tip.style.display = 'block';
-            tip.innerHTML = `Arousal: <strong>${rowData[row].desc || (9-row)}</strong><br>Valence: <strong>${valenceLabels[col]}</strong>`;
+            tip.innerHTML = `Arousal: <strong>${rowData[row].desc || (9 - row)}</strong><br>Valence: <strong>${valenceLabels[col]}</strong>`;
         });
         cell.addEventListener('mousemove', e => {
-            tip.style.left = (e.clientX+12)+'px';
-            tip.style.top  = (e.clientY-10)+'px';
+            tip.style.left = (e.clientX + 12) + 'px';
+            tip.style.top = (e.clientY - 10) + 'px';
         });
-        cell.addEventListener('mouseleave', () => { tip.style.display='none' });
+        cell.addEventListener('mouseleave', () => { tip.style.display = 'none' });
         cell.addEventListener('click', () => {
-            document.querySelectorAll('.ag-cell').forEach(c=>c.classList.remove('selected'));
+            document.querySelectorAll('.ag-cell').forEach(c => c.classList.remove('selected'));
             cell.classList.add('selected');
         });
         grid.appendChild(cell);

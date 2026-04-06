@@ -97,11 +97,11 @@ a {
     border-radius: 0.875rem;
 }
 
-/* .container {
+.container {
     width: min(75rem, 100%);
     margin-inline: auto;
     padding-inline: 1.25rem;
-} */
+}
 
 /* Layout */
 .page {
@@ -460,12 +460,12 @@ mu .timeline-milestone.is-top .timeline-caption {
 }
 
 .vars-divider {
-  width: 1px;
-  background-color: #d4c9b8;
-  align-self: stretch;
-  margin: 0 1rem;
-  margin-top: 8rem;
-  margin-bottom: 1rem;
+    width: 1px;
+    background-color: #d4c9b8;
+    align-self: stretch;
+    margin: 0 1rem;
+    margin-top: 8rem;
+    margin-bottom: 1rem;
 }
 
 .affect-grid-section {
@@ -486,7 +486,8 @@ mu .timeline-milestone.is-top .timeline-caption {
     font-size: 11px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #9e8e7e; /* match your existing muted text colour */
+    color: #9e8e7e;
+    /* match your existing muted text colour */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -530,8 +531,18 @@ mu .timeline-milestone.is-top .timeline-caption {
     transition: transform 0.1s, opacity 0.15s;
 }
 
-.ag-cell:hover { transform: scale(1.15); z-index: 2; opacity: 0.85; }
-.ag-cell.selected { transform: scale(1.2); z-index: 3; outline: 2px solid rgba(0,0,0,0.2); outline-offset: 1px; }
+.ag-cell:hover {
+    transform: scale(1.15);
+    z-index: 2;
+    opacity: 0.85;
+}
+
+.ag-cell.selected {
+    transform: scale(1.2);
+    z-index: 3;
+    outline: 2px solid rgba(0, 0, 0, 0.2);
+    outline-offset: 1px;
+}
 
 .ag-xaxis {
     font-size: 11px;
@@ -1106,20 +1117,183 @@ mu .timeline-milestone.is-top .timeline-caption {
     padding: var(--section-pad-y, 56px) 0;
 }
 
+.discussion-tabs {
+    display: grid;
+    gap: 18px;
+}
+
+.discussion-tablist {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+    margin: 0;
+    padding: 0 0.25rem;
+    border-bottom: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.discussion-tablist::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.discussion-tab {
+    appearance: none;
+    border: 1px solid rgba(46, 38, 35, 0.18);
+    border-bottom: 0;
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1;
+    padding: 0.7rem 1rem;
+    border-radius: 16px 16px 0 0;
+    cursor: pointer;
+    margin-bottom: -1px;
+    opacity: 0.78;
+    transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease, color 220ms ease;
+}
+
+.discussion-tab.is-active {
+    color: var(--plum);
+    opacity: 1;
+    transform: translateY(-4px);
+    border-color: rgba(46, 38, 35, 0.18);
+}
+
+.discussion-tab:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 0.25rem;
+}
+
+.discussion-tabpanels {
+    width: 100%;
+    border: 1px solid rgba(46, 38, 35, 0.18);
+    border-radius: 16px;
+    background: transparent;
+    padding: 16px;
+}
+
+.discussion-tabpanel {
+    width: 100%;
+}
+
+.discussion-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+}
+
+.discussion-card {
+    padding: 16px 16px 18px;
+    border: 1px solid rgba(46, 38, 35, 0.18);
+    border-radius: 16px;
+    background: var(--surface);
+    transform: translateY(0);
+    transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1), border-color 240ms ease;
+}
+
+.discussion-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(46, 38, 35, 0.30);
+}
+
+.discussion-card:has(:focus-visible) {
+    transform: translateY(-6px);
+    border-color: rgba(46, 38, 35, 0.30);
+}
+
+@keyframes discussionFloatIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.discussion-tabpanel.is-entering .discussion-card {
+    animation: discussionFloatIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.discussion-tabpanel.is-entering .discussion-card:nth-child(2) {
+    animation-delay: 40ms;
+}
+
+.discussion-tabpanel.is-entering .discussion-card:nth-child(3) {
+    animation-delay: 80ms;
+}
+
+.discussion-tabpanel.is-entering .discussion-card:nth-child(4) {
+    animation-delay: 120ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .discussion-tab,
+    .discussion-card {
+        transition: none;
+    }
+
+    .discussion-tabpanel.is-entering .discussion-card {
+        animation: none;
+    }
+}
+
 /* Critique (reuses discussion panels) */
 .critique {
     padding: var(--section-pad-y, 56px) 0;
 }
 
-.critique-grid {
+.critique-block {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 18px;
-    align-items: start;
+    grid-template-columns: 1.25fr 0.75fr;
+    gap: 24px;
+    align-items: center;
+    padding: 18px 0;
 }
 
-.critique-takehome {
-    margin-top: 18px;
+.critique-block+.critique-block {
+    border-top: 1px solid rgba(46, 38, 35, 0.22);
+}
+
+.critique-block--flip .critique-info {
+    order: 2;
+}
+
+.critique-block--flip .critique-graphic {
+    order: 1;
+}
+
+.critique-info {
+    padding: 14px 14px 16px;
+    border: 1px solid var(--line, rgba(40, 28, 18, 0.18));
+    border-radius: 14px;
+    background: transparent;
+}
+
+.critique-graphic {
+    min-height: 260px;
+    border: 1px dashed rgba(46, 38, 35, 0.22);
+    border-radius: 18px;
+    background: transparent;
+    display: grid;
+    place-items: center;
+}
+
+.critique-graphic-placeholder {
+    font-family: var(--font-body);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.8;
 }
 
 .discussion-inner {
@@ -1209,7 +1383,21 @@ mu .timeline-milestone.is-top .timeline-caption {
         grid-template-columns: 1fr;
     }
 
-    .critique-grid {
+    .discussion-tablist {
+        padding: 0;
+    }
+
+    .critique-block {
         grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .critique-block--flip .critique-info,
+    .critique-block--flip .critique-graphic {
+        order: initial;
+    }
+
+    .critique-graphic {
+        min-height: 200px;
     }
 }

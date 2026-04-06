@@ -338,7 +338,8 @@
                     <h3 class="vars-title">Independent variables (IVs)</h3>
                     <p class="vars-text">6 auditory conditions:</p>
                     <ul class="vars-list">
-                        <li>4 <strong>high-arousal music</strong> conditions, stratified by <em>emotional valence</em> and
+                        <li>4 <strong>high-arousal music</strong> conditions, stratified by <em>emotional valence</em>
+                            and
                             <em>familiarity</em>.
                         </li>
                         <li>1 <strong>neutral non-music</strong> condition.</li>
@@ -360,23 +361,23 @@
                 </div>
             </div>
 
-			<div class="affect-grid-section">
-    				<div class="ag-outer">
-        				<div class="ag-yaxis">Arousal Level</div>
-        				<div class="ag-row-labels" id="rowLabels"></div>
-        				<div class="ag-right">
-            				<div class="ag-grid" id="agGrid"></div>
-            				<div class="ag-xaxis">Valence</div>
-            				<div class="ag-corner-labels">
-                				<span class="ag-corner">Extremely negative</span>
-                				<span class="ag-corner">Neutral</span>
-                				<span class="ag-corner">Extremely positive</span>
-            				</div>
-        				</div>
-    				</div>
-				</div>
-				<div class="ag-tooltip" id="agTip"></div>
-				
+            <div class="affect-grid-section">
+                <div class="ag-outer">
+                    <div class="ag-yaxis">Arousal Level</div>
+                    <div class="ag-row-labels" id="rowLabels"></div>
+                    <div class="ag-right">
+                        <div class="ag-grid" id="agGrid"></div>
+                        <div class="ag-xaxis">Valence</div>
+                        <div class="ag-corner-labels">
+                            <span class="ag-corner">Extremely negative</span>
+                            <span class="ag-corner">Neutral</span>
+                            <span class="ag-corner">Extremely positive</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ag-tooltip" id="agTip"></div>
+
         </section>
 
         <section class="results" aria-label="Results">
@@ -472,84 +473,126 @@
             <div class="discussion-inner">
                 <div class="discussion-head">
                     <h2 class="discussion-heading">V. DISCUSSION</h2>
-                    <p class="discussion-subtitle">What the results mean, what they change, and why it matters.</p>
                 </div>
 
-                <div class="discussion-grid" aria-label="Discussion summary">
-                    <div class="discussion-panel" aria-label="Interpretation">
-                        <h3 class="discussion-title">Interpretation</h3>
-                        <div class="discussion-blocks" role="list">
-                            <div class="discussion-block" role="listitem">
-                                <p class="discussion-text">The authors interpret their findings as evidence that
-                                    <strong>music-induced emotional arousal does not uniformly enhance memory</strong>,
-                                    but can create a trade-off between general <strong>“gist”</strong> memory and
-                                    specific <strong>“detail”</strong> memory.
-                                </p>
-                            </div>
-                            <div class="discussion-block" role="listitem">
-                                <p class="discussion-text">They conclude the relationship follows a <strong>non-linear,
-                                        quadratic</strong> pattern consistent with the <strong>Yerkes–Dodson
-                                        law</strong>: <strong>moderate</strong> increases in arousal are “optimal” for
-                                    detailed memory (pattern separation), while <strong>more extreme</strong> increases
-                                    or decreases favor general recognition.</p>
-                            </div>
-                            <div class="discussion-block" role="listitem">
-                                <p class="discussion-text">They also emphasize that <strong>individual subjective
-                                        responses</strong> matter more than the specific type of music played: the same
-                                    song can lead to different memory outcomes depending on the listener’s unique
-                                    emotional reaction.</p>
-                            </div>
-                        </div>
+                <div class="discussion-tabs" data-discussion-tabs>
+                    <div class="discussion-tablist" role="tablist" aria-label="Discussion tabs">
+                        <button class="discussion-tab is-active" type="button" role="tab" id="tab-interpretation"
+                            aria-controls="panel-interpretation" aria-selected="true" tabindex="0"
+                            data-discussion-tab="interpretation">
+                            Interpretation
+                        </button>
+                        <button class="discussion-tab" type="button" role="tab" id="tab-implications"
+                            aria-controls="panel-implications" aria-selected="false" tabindex="-1"
+                            data-discussion-tab="implications">
+                            Implications
+                        </button>
+                        <button class="discussion-tab" type="button" role="tab" id="tab-importance"
+                            aria-controls="panel-importance" aria-selected="false" tabindex="-1"
+                            data-discussion-tab="importance">
+                            Importance
+                        </button>
                     </div>
 
-                    <div class="discussion-panel" aria-label="Implications">
-                        <h3 class="discussion-title">Implications</h3>
-                        <div class="discussion-blocks" role="list">
-                            <div class="discussion-block" role="listitem">
-                                <p class="discussion-text"><strong>No “One-Size-Fits-All”:</strong> Music interventions
-                                    can’t be applied uniformly across populations; future clinical applications may need
-                                    to be personalized to account for individual “cortical arousability” and personal
-                                    music preferences.</p>
-                            </div>
-                            <div class="discussion-block" role="listitem">
-                                <p class="discussion-text"><strong>Unique mechanisms of music:</strong> Because
-                                    music-induced arousal improved detailed memory more effectively than non-music
-                                    sounds at similar arousal levels, music may engage distinct neural mechanisms for
-                                    consolidation.</p>
-                            </div>
-                            <div class="discussion-block" role="listitem">
-                                <p class="discussion-text"><strong>Refining memory models:</strong> The results refine
-                                    models like Arousal-Biased Competition: high arousal amplifies the gist/detail
-                                    trade-off, while moderate arousal may reduce this competition to support better
-                                    detailed memory.</p>
-                            </div>
-                            <div class="discussion-block" role="listitem">
-                                <p class="discussion-text"><strong>Targeting the consolidation window:</strong> The
-                                    post-encoding design highlights timing: music played shortly after learning can
-                                    modulate how the brain stabilizes new information.</p>
+                    <div class="discussion-tabpanels" aria-label="Discussion panels">
+                        <div class="discussion-tabpanel" role="tabpanel" id="panel-interpretation"
+                            aria-labelledby="tab-interpretation" data-discussion-panel="interpretation">
+                            <div class="discussion-cards" role="list">
+                                <div class="discussion-card" role="listitem">
+                                    <p class="discussion-text">The authors interpret their findings as evidence that
+                                        <strong>music-induced emotional arousal does not uniformly enhance
+                                            memory</strong>,
+                                        but can create a trade-off between general <strong>“gist”</strong> memory and
+                                        specific <strong>“detail”</strong> memory.
+                                    </p>
+                                </div>
+                                <div class="discussion-card" role="listitem">
+                                    <p class="discussion-text">They conclude the relationship follows a
+                                        <strong>non-linear,
+                                            quadratic</strong> pattern consistent with the <strong>Yerkes–Dodson
+                                            law</strong>: <strong>moderate</strong> increases in arousal are “optimal”
+                                        for
+                                        detailed memory (pattern separation), while <strong>more extreme</strong>
+                                        increases
+                                        or decreases favor general recognition.
+                                    </p>
+                                </div>
+                                <div class="discussion-card" role="listitem">
+                                    <p class="discussion-text">They also emphasize that <strong>individual subjective
+                                            responses</strong> matter more than the specific type of music played: the
+                                        same
+                                        song can lead to different memory outcomes depending on the listener’s unique
+                                        emotional reaction.</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="discussion-callouts" aria-label="Why it matters">
-                    <div class="discussion-callout" aria-label="Why researchers should care">
-                        <h3 class="discussion-title">Why should researchers care?</h3>
-                        <p class="discussion-text">This study provides a methodological blueprint for handling
-                            subjective stimuli. By using machine learning (<strong>k-means clustering</strong>) to group
-                            participants by their actual physiological/emotional response rather than assigned
-                            condition, the authors address high individual variability. It also opens avenues for
-                            neuroimaging work examining how music-induced arousal impacts connectivity between the
-                            <strong>hippocampus</strong> and <strong>amygdala</strong>.
-                        </p>
-                    </div>
-                    <div class="discussion-callout" aria-label="Why laypeople should care">
-                        <h3 class="discussion-title">Why should laypeople care?</h3>
-                        <p class="discussion-text">It offers hope for more effective treatments for Alzheimer’s disease,
-                            depression, and age-related memory loss. It also implies a practical strategy: if you want
-                            to remember <strong>specific details</strong> of something you just learned, music that
-                            makes you feel <strong>moderately energized</strong> (not extremely stressed/excited or
-                            completely relaxed) may be the most effective.</p>
+                        <div class="discussion-tabpanel" role="tabpanel" id="panel-implications"
+                            aria-labelledby="tab-implications" data-discussion-panel="implications" hidden>
+                            <div class="discussion-cards" role="list">
+                                <div class="discussion-card" role="listitem">
+                                    <p class="discussion-text"><strong>No “One-Size-Fits-All”:</strong> Music
+                                        interventions
+                                        can’t be applied uniformly across populations; future clinical applications may
+                                        need
+                                        to be personalized to account for individual “cortical arousability” and
+                                        personal
+                                        music preferences.</p>
+                                </div>
+                                <div class="discussion-card" role="listitem">
+                                    <p class="discussion-text"><strong>Unique mechanisms of music:</strong> Because
+                                        music-induced arousal improved detailed memory more effectively than non-music
+                                        sounds at similar arousal levels, music may engage distinct neural mechanisms
+                                        for
+                                        consolidation.</p>
+                                </div>
+                                <div class="discussion-card" role="listitem">
+                                    <p class="discussion-text"><strong>Refining memory models:</strong> The results
+                                        refine
+                                        models like Arousal-Biased Competition: high arousal amplifies the gist/detail
+                                        trade-off, while moderate arousal may reduce this competition to support better
+                                        detailed memory.</p>
+                                </div>
+                                <div class="discussion-card" role="listitem">
+                                    <p class="discussion-text"><strong>Targeting the consolidation window:</strong> The
+                                        post-encoding design highlights timing: music played shortly after learning can
+                                        modulate how the brain stabilizes new information.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="discussion-tabpanel" role="tabpanel" id="panel-importance"
+                            aria-labelledby="tab-importance" data-discussion-panel="importance" hidden>
+                            <div class="discussion-cards" role="list">
+                                <div class="discussion-card" role="listitem">
+                                    <h3 class="discussion-title">Why should researchers care?</h3>
+                                    <p class="discussion-text">This study provides a methodological blueprint for
+                                        handling
+                                        subjective stimuli. By using machine learning (<strong>k-means
+                                            clustering</strong>) to group
+                                        participants by their actual physiological/emotional response rather than
+                                        assigned
+                                        condition, the authors address high individual variability. It also opens
+                                        avenues for
+                                        neuroimaging work examining how music-induced arousal impacts connectivity
+                                        between the
+                                        <strong>hippocampus</strong> and <strong>amygdala</strong>.
+                                    </p>
+                                </div>
+                                <div class="discussion-card" role="listitem">
+                                    <h3 class="discussion-title">Why should laypeople care?</h3>
+                                    <p class="discussion-text">It offers hope for more effective treatments for
+                                        Alzheimer’s disease,
+                                        depression, and age-related memory loss. It also implies a practical strategy:
+                                        if you want
+                                        to remember <strong>specific details</strong> of something you just learned,
+                                        music that
+                                        makes you feel <strong>moderately energized</strong> (not extremely
+                                        stressed/excited or
+                                        completely relaxed) may be the most effective.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -562,8 +605,8 @@
                     <p class="discussion-subtitle">Strengths, limitations, and where this line of work goes next.</p>
                 </div>
 
-                <div class="critique-grid" aria-label="Critique overview">
-                    <div class="discussion-panel" aria-label="Strengths">
+                <div class="critique-block critique-block--strengths" aria-label="Strengths">
+                    <div class="critique-info">
                         <h3 class="discussion-title">Strengths</h3>
                         <div class="discussion-blocks" role="list">
                             <div class="discussion-block" role="listitem">
@@ -587,8 +630,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="critique-graphic" aria-label="Strengths graphic area">
+                        <div class="critique-graphic-placeholder" aria-hidden="true">Graphic</div>
+                    </div>
+                </div>
 
-                    <div class="discussion-panel" aria-label="Weaknesses">
+                <div class="critique-block critique-block--weaknesses critique-block--flip" aria-label="Weaknesses">
+                    <div class="critique-info">
                         <h3 class="discussion-title">Weaknesses</h3>
                         <div class="discussion-blocks" role="list">
                             <div class="discussion-block" role="listitem">
@@ -608,8 +656,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="critique-graphic" aria-label="Weaknesses graphic area">
+                        <div class="critique-graphic-placeholder" aria-hidden="true">Graphic</div>
+                    </div>
+                </div>
 
-                    <div class="discussion-panel" aria-label="Future directions">
+                <div class="critique-block critique-block--future" aria-label="Future directions">
+                    <div class="critique-info">
                         <h3 class="discussion-title">Future directions</h3>
                         <div class="discussion-blocks" role="list">
                             <div class="discussion-block" role="listitem">
@@ -635,18 +688,23 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="critique-takehome" aria-label="Take home message">
-                    <div class="discussion-panel">
-                        <h3 class="discussion-title">Take home message</h3>
-                        <p class="discussion-text">Music is a powerful but personalized tool for the brain. To remember
-                            the fine details of an experience, you should aim for <strong>moderate arousal</strong>.
-                            However, if your emotional response to music is either too intense or highly relaxing, your
-                            brain will shift its priority toward remembering the general <strong>“gist”</strong> of the
-                            event while losing the specifics.</p>
+                    <div class="critique-graphic" aria-label="Future directions graphic area">
+                        <div class="critique-graphic-placeholder" aria-hidden="true">Graphic</div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="big-question" aria-label="Take home message">
+            <div class="container big-question-inner">
+                <p class="big-question-kicker">Take-home message:</p>
+                <blockquote class="big-question-quote">
+                    <p>
+                        Music is a powerful but personalized tool for the brain. To remember the fine details of an
+                        experience, aim for <strong>moderate arousal</strong>—too intense or too relaxing shifts memory
+                        toward the general <strong>“gist”</strong> and away from specifics.
+                    </p>
+                </blockquote>
             </div>
         </section>
 

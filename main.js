@@ -769,3 +769,54 @@
     setActiveView(initialViewKey);
     setActive(initialPlotKey);
 })();
+
+// affect grid 
+const rowData = [
+    { desc: 'High' }, {desc:''}, {desc:''}, {desc:''},
+    { desc: 'Neutral' }, {desc:''}, {desc:''}, {desc:''},
+    { desc: 'Low' }
+];
+
+document.getElementById('rowLabels').innerHTML = rowData
+    .map(r => `<div class="ag-row-label">${r.desc ? `<span class="ag-row-desc">${r.desc}</span>` : ''}</div>`)
+    .join('');
+
+const corners = {
+    tl:[186,110,88], tr:[188,155,72],
+    bl:[120,118,150], br:[100,155,138]
+};
+function lerp(a,b,t){ return a+(b-a)*t }
+function lerpC(c1,c2,t){ return c1.map((v,i)=>Math.round(lerp(v,c2[i],t))) }
+function cellColor(col,row){
+    const tx=col/8, ty=row/8;
+    const top=lerpC(corners.tl,corners.tr,tx);
+    const bot=lerpC(corners.bl,corners.br,tx);
+    const [r,g,b]=lerpC(top,bot,ty);
+    return `rgb(${r},${g},${b})`;
+}
+
+const valenceLabels=['1 — Extremely Negative','2','3','4','5 — Neutral','6','7','8','9 — Extremely Positive'];
+const tip = document.getElementById('agTip');
+const grid = document.getElementById('agGrid');
+
+for(let row=0; row<9; row++){
+    for(let col=0; col<9; col++){
+        const cell = document.createElement('div');
+        cell.className = 'ag-cell';
+        cell.style.background = cellColor(col, row);
+        cell.addEventListener('mouseenter', e => {
+            tip.style.display = 'block';
+            tip.innerHTML = `Arousal: <strong>${rowData[row].desc || (9-row)}</strong><br>Valence: <strong>${valenceLabels[col]}</strong>`;
+        });
+        cell.addEventListener('mousemove', e => {
+            tip.style.left = (e.clientX+12)+'px';
+            tip.style.top  = (e.clientY-10)+'px';
+        });
+        cell.addEventListener('mouseleave', () => { tip.style.display='none' });
+        cell.addEventListener('click', () => {
+            document.querySelectorAll('.ag-cell').forEach(c=>c.classList.remove('selected'));
+            cell.classList.add('selected');
+        });
+        grid.appendChild(cell);
+    }
+}

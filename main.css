@@ -468,6 +468,106 @@ mu .timeline-milestone.is-top .timeline-caption {
   margin-bottom: 1rem;
 }
 
+.affect-grid-section {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.ag-outer {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.ag-yaxis {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9e8e7e; /* match your existing muted text colour */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ag-row-labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2px 0;
+    width: 50px;
+    flex-shrink: 0;
+}
+
+.ag-row-label {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    text-align: right;
+}
+
+.ag-row-desc {
+    font-size: 10px;
+    color: #9e8e7e;
+    font-style: italic;
+}
+
+.ag-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 3px;
+    width: 360px;
+}
+
+.ag-cell {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.15s;
+}
+
+.ag-cell:hover { transform: scale(1.15); z-index: 2; opacity: 0.85; }
+.ag-cell.selected { transform: scale(1.2); z-index: 3; outline: 2px solid rgba(0,0,0,0.2); outline-offset: 1px; }
+
+.ag-xaxis {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9e8e7e;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.ag-corner-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+}
+
+.ag-corner {
+    font-size: 11px;
+    color: #9e8e7e;
+    font-style: italic;
+}
+
+.ag-tooltip {
+    position: fixed;
+    background: #fff;
+    border: 0.5px solid #d4c9b8;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: #5a4f45;
+    pointer-events: none;
+    display: none;
+    z-index: 100;
+    white-space: nowrap;
+}
+
 /* Intro / Previous Research */
 .intro {
     display: grid;

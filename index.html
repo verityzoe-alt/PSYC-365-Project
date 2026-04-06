@@ -11,6 +11,7 @@
         content="Fine-Tuning the Details: Post-encoding Music Differentially Impacts General and Detailed Memory — Kayla R. Clark and Stephanie L. Leal" />
 
     <link rel="stylesheet" href="main.css" />
+    <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
     <script defer src="main.js"></script>
 </head>
 
@@ -88,7 +89,7 @@
                 <p class="big-question-kicker">Big picture question:</p>
                 <blockquote class="big-question-quote">
                     <p>
-                        How does post-encoding music influence general (gist) versus detailed memory?
+                        How does post-encoding music influence general versus detailed memory?
                     </p>
                 </blockquote>
             </div>
@@ -262,19 +263,23 @@
                     <div class="timeline-panel" id="timeline-panel" role="region" aria-live="polite">
                         <div class="timeline-detail is-active" data-timeline-panel="arrival">
                             <h3 class="timeline-title">Participant arrives</h3>
-                            <p class="timeline-text">130 Rice University Students, aged 18-35, arrive for the session and begin the study procedure.
+                            <p class="timeline-text">130 Rice University Students, aged 18-35, arrive for the session
+                                and begin the study procedure.
                             </p>
                         </div>
 
                         <div class="timeline-detail" data-timeline-panel="encoding" hidden>
                             <h3 class="timeline-title">Encoding phase</h3>
-                            <p class="timeline-text"> Participants viewed 128 images of common household objects and classified them as "indoor" or "outdoor" to ensure incidental learning, this is the inital learning task.
+                            <p class="timeline-text"> Participants viewed 128 images of common household objects and
+                                classified them as "indoor" or "outdoor" to ensure incidental learning, this is the
+                                inital learning task.
                             </p>
                         </div>
 
                         <div class="timeline-detail" data-timeline-panel="emotion1" hidden>
                             <h3 class="timeline-title">Self-assessment of emotion #1</h3>
-                            <p class="timeline-text">Immediately after learning, participants report their current affective state before the
+                            <p class="timeline-text">Immediately after learning, participants report their current
+                                affective state before the
                                 intervention.</p>
                         </div>
 
@@ -286,34 +291,165 @@
 
                         <div class="timeline-detail" data-timeline-panel="music" hidden>
                             <h3 class="timeline-title">Music intervention (10 min)</h3>
-                            <p class="timeline-text"> While completing the first self-assessment survey, they listened to one of six acoustic conditions (various types of music, neutral sounds, or silence) while filling out surveys.</p>
+                            <p class="timeline-text"> While completing the first self-assessment survey, they listened
+                                to one of six acoustic conditions (see IVs below) for 10 minutes. After 10 min,
+                                participants continued completing surveys in silence for an additional 20 min to
+                                allow for emotional arousal to dissipate before the retrieval
+                                phase.</p>
                         </div>
 
                         <div class="timeline-detail" data-timeline-panel="surveys" hidden>
                             <h3 class="timeline-title">Surveys (30 min)</h3>
-                            <p class="timeline-text">Participants continued surveys in silence to allow arousal to dissipate.
+                            <p class="timeline-text">Participants continued surveys in silence to allow arousal to
+                                dissipate.
                             </p>
                         </div>
 
                         <div class="timeline-detail" data-timeline-panel="retrieval" hidden>
                             <h3 class="timeline-title">Retrieval phase</h3>
-                            <p class="timeline-text">Participants performed a Mnemonic Discrimination Task (MDT), a memory assesment, where they viewed 192 images (some identical to the first phase “targets”, some similar "lures," and some entirely new "foils") and identified them as "Old" or "New".</p>
+                            <p class="timeline-text">Participants performed a Mnemonic Discrimination Task (MDT), a
+                                memory assesment, where they viewed 192 images (some identical to the first phase
+                                “targets”, some similar "lures," and some entirely new "foils") and identified them as
+                                "Old" or "New".</p>
                         </div>
 
                         <div class="timeline-detail" data-timeline-panel="musicRating" hidden>
                             <h3 class="timeline-title">Music-rating task</h3>
-                            <p class="timeline-text">Participants completed a task where they provided subjective ratings for the specific music or sounds they had heard during the intervention. They evaluated these stimuli across four key dimensions: emotional arousal, emotional valence, familiarity, and pleasantness.
+                            <p class="timeline-text">Participants completed a task where they provided subjective
+                                ratings for the specific music or sounds they had heard during the intervention. They
+                                evaluated these stimuli across four key dimensions: emotional arousal, emotional
+                                valence, familiarity, and pleasantness.
                             </p>
                         </div>
 
                         <div class="timeline-detail" data-timeline-panel="finalSurveys" hidden>
                             <h3 class="timeline-title">Surveys</h3>
-                            <p class="timeline-text">To conclude the session, participants completed final questionnaires that assessed their musical background, specifically focusing on their musical expertise and how they typically engage with music in their daily lives.
+                            <p class="timeline-text">To conclude the session, participants completed final
+                                questionnaires that assessed their musical background, specifically focusing on their
+                                musical expertise and how they typically engage with music in their daily lives.
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="design-variables" aria-label="Study variables">
+                <div class="vars-card" aria-label="Independent variables">
+                    <h3 class="vars-title">Independent variables (IVs)</h3>
+                    <p class="vars-text">6 auditory conditions:</p>
+                    <ul class="vars-list">
+                        <li>4 high-arousal music conditions, stratified by <em>emotional valence</em> and
+                            <em>familiarity</em>.
+                        </li>
+                        <li>1 neutral non-music condition.</li>
+                        <li>1 silent condition.</li>
+                    </ul>
+                </div>
+
+                <div class="vars-card" aria-label="Dependent variables">
+                    <h3 class="vars-title">Dependent variables (DVs)</h3>
+                    <ul class="vars-list">
+                        <li><strong>target recognition: </strong> measure of general memory for repeated images.</li>
+                        <li><strong>lure discrimination: </strong> measure of detailed memory to discriminate between
+                            "old" and "new" images. </li>
+                        <li><strong>emotional arousal: </strong> measured by the use of a 9x9 affect grid. </li>
+
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="results" aria-label="Results">
+            <div class="results-inner">
+                <div class="results-head">
+                    <h2 class="results-heading">IV. RESULTS</h2>
+                </div>
+
+                <div class="results-h1" aria-label="R1 results">
+                    <div class="results-r1-left" aria-label="R1 visual area">
+                        <div class="results-plot" id="plot-r1" aria-label="R1 plot"></div>
+                    </div>
+
+                    <div class="results-h1-right" aria-label="R1 summary">
+                        <h3 class="results-h1-title">R1: memory vs. emotional arousal</h3>
+
+                        <div class="results-blocks" role="list" aria-label="R1 findings">
+                            <button class="results-block results-block-trigger is-active" type="button" role="listitem"
+                                data-r1-plot="baseline" aria-pressed="true">
+                                <p class="results-block-text">At baseline, there was no difference between music and
+                                    control groups.</p>
+                            </button>
+                            <button class="results-block results-block-trigger" type="button" role="listitem"
+                                data-r1-plot="post" aria-pressed="false">
+                                <p class="results-block-text">Post-treatment, the music group showed significantly
+                                    higher arousal than control.</p>
+                            </button>
+                            <button class="results-block results-block-trigger" type="button" role="listitem"
+                                data-r1-plot="conditions" aria-pressed="false">
+                                <p class="results-block-text">Across experimental conditions, N-HF, P-LF, and N-LF
+                                    exhibited increases in arousal relative to Silent, Neutral, and P-HF.</p>
+                            </button>
+                            <div class="results-block" role="listitem">
+                                <p class="results-block-text">There were individual differences in music-induced
+                                    emotional arousal; not all participants increased in arousal from listening to
+                                    music, with some showing decreases instead.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-h1 results-h1--flip" aria-label="R2 results">
+                    <div class="results-h1-right results-h1-right--left" aria-label="R2 summary">
+                        <h3 class="results-h1-title">R2: emotional arousal vs. memory</h3>
+
+                        <div class="results-blocks" role="list" aria-label="R2 findings">
+                            <div class="results-block" role="listitem">
+                                <p class="results-block-text">There were no significant differences in memory across
+                                    experimental groups for either target recognition or lure
+                                    discrimination.</p>
+                            </div>
+                            <div class="results-block" role="listitem">
+                                <p class="results-block-text">However, to account for the individual differences in
+                                    arousal, participants were <strong>clustered</strong> based on their emotional
+                                    arousal score change from baseline to post-treatment.</p>
+                            </div>
+                            <button class="results-block results-block-trigger is-active" type="button" role="listitem"
+                                data-r2-plot="fig6" aria-pressed="true">
+                                <p class="results-block-text">In music groups, three clusters emerged: one
+                                    <strong>low</strong> cluster that showed a decrease in arousal, one
+                                    <strong>medium</strong>
+                                    with a moderate increase, and one <strong>high</strong> with a strong increase.
+                                    This time there were significant differences: low and high clusters were
+                                    better at target recognition, but worse at lure discrimination than the moderate
+                                    cluster!
+                                </p>
+                            </button>
+                            <button class="results-block results-block-trigger" type="button" role="listitem"
+                                data-r2-plot="fig7" aria-pressed="false">
+                                <p class="results-block-text">In control groups, there were two clusters: one
+                                    <strong>moderate-increase</strong> and one <strong>moderate-decrease</strong>.
+                                    Interestingly, the decrease cluster significantly outperformed the increase cluster
+                                    in both target recognition and lure discrimination.
+                                </p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="results-r1-left" aria-label="R2 visual area">
+                        <div class="results-switch" data-r2-view-switch hidden aria-label="R2 figure switch">
+                            <button class="results-switch-btn is-active" type="button" data-r2-view="target"
+                                aria-pressed="true">Target recognition</button>
+                            <button class="results-switch-btn" type="button" data-r2-view="lure"
+                                aria-pressed="false">Lure discrimination</button>
+                        </div>
+                        <div class="results-plot" id="plot-r2" aria-label="R2 plot"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <!--  -->
         </section>
 
         <!-- image test -->

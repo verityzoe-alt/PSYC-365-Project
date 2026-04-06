@@ -244,3 +244,528 @@
         updateOverlays();
     }, 60);
 })();
+
+(() => {
+    const plotEl = document.getElementById('plot-r1');
+    if (!(plotEl instanceof HTMLElement)) return;
+    // Plotly is loaded via CDN in index.html.
+    if (typeof window.Plotly === 'undefined') return;
+
+    const triggerEls = Array.from(document.querySelectorAll('[data-r1-plot]')).filter(
+        (el) => el instanceof HTMLButtonElement
+    );
+
+    const getVar = (name) =>
+        getComputedStyle(document.documentElement).getPropertyValue(name).trim() || undefined;
+
+    const text = getVar('--text') || '#2E2623';
+    const muted = getVar('--text-muted') || '#756A64';
+    const bg = getVar('--bg') || '#F7F2EA';
+    const musicColor = getVar('--teal') || '#5D8C87';
+    const controlColor = getVar('--apricot') || '#E5A97A';
+    const plum = getVar('--plum') || '#7A5C7B';
+    const gold = getVar('--gold') || '#D8C06A';
+    const surface = getVar('--surface') || '#FFF9F2';
+    const blue = getVar('--blue') || '#4B86C7';
+    const pink = getVar('--pink') || '#D48AA8';
+
+    // Approximate values inferred from the paper figure (since exact means/SEs aren't reported).
+    // Update these later if you extract the precise values from the paper.
+    const states = {
+        baseline: {
+            kind: 'twoBar',
+            xLabel: 'Baseline',
+            yLabel: 'Arousal',
+            x: ['Music', 'Control'],
+            y: [4.1, 4.45],
+            colors: [musicColor, controlColor],
+            yRange: [1, 9],
+            yTick0: 1,
+            yDtick: 1,
+        },
+        post: {
+            kind: 'twoBar',
+            xLabel: 'Post-treatment',
+            yLabel: 'Arousal',
+            x: ['Music', 'Control'],
+            y: [4.9, 4.25],
+            colors: [musicColor, controlColor],
+            yRange: [1, 9],
+            yTick0: 1,
+            yDtick: 1,
+        },
+        conditions: {
+            kind: 'conditions',
+            xLabel: 'Experimental conditions',
+            yLabel: 'Arousal change score',
+            x: ['N-LF', 'N-HF', 'P-LF', 'P-HF', 'Neutral', 'Silent'],
+            // Approximate values based on the figure's bar heights (no dots/error bars/significance).
+            y: [1.0, 1.1, 1.0, -0.6, -0.2, 0.0],
+            colors: [controlColor, musicColor, gold, plum, blue, pink],
+            yRange: [-6, 6],
+            yTick0: -6,
+            yDtick: 2,
+            zeroLine: true,
+        },
+    };
+
+    const getState = (key) => states[key] || states.baseline;
+
+    const buildData = (key) => {
+        const state = getState(key);
+        return [
+            {
+                type: 'bar',
+                name: 'Arousal',
+                x: state.x,
+                y: state.y,
+                marker: {
+                    color: state.colors,
+                    line: { color: text, width: 1 },
+                },
+                hoverinfo: 'skip',
+            },
+        ];
+    };
+
+    const buildLayout = (key) => {
+        const state = getState(key);
+        return {
+            margin: { l: 56, r: 12, t: 10, b: 56 },
+            paper_bgcolor: bg,
+            plot_bgcolor: bg,
+            font: { family: 'Switzer, sans-serif', color: text, size: 15 },
+            xaxis: {
+                title: { text: state.xLabel, font: { color: muted, size: 15 } },
+                tickfont: { color: text, size: 14 },
+                linecolor: text,
+                linewidth: 1,
+                showgrid: false,
+                zeroline: false,
+            },
+            yaxis: {
+                title: { text: state.yLabel, font: { color: muted, size: 15 } },
+                range: state.yRange,
+                tick0: state.yTick0,
+                dtick: state.yDtick,
+                tickfont: { color: text, size: 14 },
+                gridcolor: 'rgba(46,38,35,0.12)',
+                linecolor: text,
+                linewidth: 1,
+                zeroline: Boolean(state.zeroLine),
+                zerolinecolor: text,
+                zerolinewidth: 1,
+            },
+            showlegend: false,
+            hovermode: false,
+            bargap: 0.2,
+        };
+    };
+
+    const config = {
+        displayModeBar: false,
+        responsive: true,
+    };
+
+    let currentKey = 'baseline';
+    let hasPlotted = false;
+
+    const plotInitial = (key) => {
+        hasPlotted = true;
+        currentKey = key;
+        return window.Plotly.newPlot(plotEl, buildData(key), buildLayout(key), config);
+    };
+
+    const animateTwoBarTo = (key) => {
+        const state = getState(key);
+        currentKey = key;
+
+        // Ensure axis label updates.
+        window.Plotly.relayout(plotEl, {
+            'xaxis.title.text': state.xLabel,
+        });
+
+        return window.Plotly.animate(
+            plotEl,
+            {
+                data: [{ y: state.y }],
+            },
+            {
+                transition: { duration: 700, easing: 'cubic-in-out' },
+                frame: { duration: 700, redraw: false },
+            }
+        );
+    };
+
+    const fadeSwapTo = (key) => {
+        currentKey = key;
+
+        // Fade out, swap, then fade in.
+        plotEl.classList.add('is-fading');
+        window.setTimeout(() => {
+            window.Plotly.react(plotEl, buildData(key), buildLayout(key), config);
+            // Next tick: allow opacity to transition back.
+            window.requestAnimationFrame(() => {
+                plotEl.classList.remove('is-fading');
+            });
+        }, 220);
+    };
+
+    const setActive = (key) => {
+        const nextKey = key in states ? key : 'baseline';
+        triggerEls.forEach((btn) => {
+            const isActive = btn.getAttribute('data-r1-plot') === nextKey;
+            btn.classList.toggle('is-active', isActive);
+            btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+
+        const nextState = getState(nextKey);
+        const currentState = getState(currentKey);
+
+        if (!hasPlotted) {
+            plotInitial(nextKey);
+            return;
+        }
+
+        const bothTwoBar = currentState.kind === 'twoBar' && nextState.kind === 'twoBar';
+        if (bothTwoBar) {
+            animateTwoBarTo(nextKey);
+            return;
+        }
+
+        fadeSwapTo(nextKey);
+    };
+
+    // Initialize with whichever trigger is marked active, otherwise baseline.
+    const initialKey =
+        triggerEls.find((el) => el.classList.contains('is-active'))?.getAttribute('data-r1-plot') || 'baseline';
+
+    triggerEls.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const key = btn.getAttribute('data-r1-plot');
+            if (!key) return;
+            setActive(key);
+        });
+    });
+
+    setActive(initialKey);
+})();
+
+(() => {
+    const plotEl = document.getElementById('plot-r2');
+    if (!(plotEl instanceof HTMLElement)) return;
+    if (typeof window.Plotly === 'undefined') return;
+
+    const triggerEls = Array.from(document.querySelectorAll('[data-r2-plot]')).filter(
+        (el) => el instanceof HTMLButtonElement
+    );
+
+    const switchHost = document.querySelector('[data-r2-view-switch]');
+    const switchBtns = Array.from(document.querySelectorAll('[data-r2-view]')).filter(
+        (el) => el instanceof HTMLButtonElement
+    );
+
+    const getVar = (name) =>
+        getComputedStyle(document.documentElement).getPropertyValue(name).trim() || undefined;
+
+    const text = getVar('--text') || '#2E2623';
+    const muted = getVar('--text-muted') || '#756A64';
+    const bg = getVar('--bg') || '#F7F2EA';
+    const teal = getVar('--teal') || '#5D8C87';
+    const gold = getVar('--gold') || '#D8C06A';
+    const pink = getVar('--pink') || '#D48AA8';
+
+    const palette = {
+        low: pink,
+        moderate: gold,
+        high: teal,
+    };
+
+    const categories3 = ['Low (decrease)', 'Moderate', 'High (increase)'];
+    const categories2 = ['Low (decrease)', 'Moderate'];
+
+    // Approximate values inferred from the paper figure (no error bars/significance).
+    // Update later if you extract exact values.
+    const plots = {
+        // Figure 5C/5D: Memory performance means by arousal-change cluster.
+        fig6: {
+            xTitle: 'Change in Arousal',
+            showN: true,
+            categories: categories3,
+            views: {
+                target: {
+                    yTitle: 'Target Recognition',
+                    yRange: [0, 4],
+                    yTick0: 0,
+                    yDtick: 1,
+                    // Approximate values from the figure.
+                    y: [3.2, 2.0, 3.3],
+                    // Participant counts you provided.
+                    n: [29, 27, 30],
+                },
+                lure: {
+                    yTitle: 'Lure Discrimination',
+                    yRange: [0, 0.8],
+                    yTick0: 0,
+                    yDtick: 0.2,
+                    y: [0.30, 0.56, 0.33],
+                    n: [23, 34, 29],
+                },
+            },
+        },
+
+        // Control groups: two clusters (Low decrease vs Moderate) with Target/Lure panels.
+        fig7: {
+            xTitle: 'Change in Arousal',
+            showN: true,
+            categories: categories2,
+            views: {
+                // Approximate values from the provided figure (ignore hatch patterns).
+                target: {
+                    yTitle: 'Target Recognition',
+                    yRange: [0, 4],
+                    yTick0: 0,
+                    yDtick: 1,
+                    y: [3.2, 2.0],
+                    n: [17, 27],
+                },
+                lure: {
+                    yTitle: 'Lure Discrimination',
+                    yRange: [0, 0.8],
+                    yTick0: 0,
+                    yDtick: 0.2,
+                    y: [0.49, 0.30],
+                    n: [22, 22],
+                },
+            },
+        },
+    };
+
+    const getPlot = (plotKey) => plots[plotKey] || plots.fig6;
+    const getView = (plotKey, viewKey) => {
+        const plot = getPlot(plotKey);
+        return plot.views[viewKey] || plot.views.target;
+    };
+
+    const buildTrace = (plotKey, viewKey) => {
+        const plot = getPlot(plotKey);
+        const view = getView(plotKey, viewKey);
+
+        const xCats = plot.categories || categories3;
+        const barColors =
+            xCats.length === 2
+                ? [palette.low, palette.moderate]
+                : [palette.low, palette.moderate, palette.high];
+
+        const trace = {
+            type: 'bar',
+            name: plot.yTitle,
+            x: xCats,
+            y: view.y,
+            marker: {
+                color: barColors,
+                line: { color: text, width: 1 },
+            },
+            hoverinfo: 'skip',
+            cliponaxis: false,
+        };
+
+        if (plot.showN && Array.isArray(view.n)) {
+            trace.customdata = view.n;
+            trace.texttemplate = 'n=%{customdata}';
+            trace.textposition = 'outside';
+            trace.textfont = { color: text, size: 13 };
+        }
+
+        return trace;
+    };
+
+    const buildLayout = (plotKey, viewKey) => {
+        const plot = getPlot(plotKey);
+        const view = getView(plotKey, viewKey);
+        return {
+            margin: { l: 92, r: 12, t: 42, b: 64 },
+            paper_bgcolor: bg,
+            plot_bgcolor: bg,
+            font: { family: 'Switzer, sans-serif', color: text, size: 15 },
+            xaxis: {
+                title: { text: plot.xTitle, font: { color: muted, size: 15 } },
+                tickfont: { color: text, size: 14 },
+                linecolor: text,
+                linewidth: 1,
+                showgrid: false,
+                zeroline: false,
+            },
+            yaxis: {
+                title: { text: view.yTitle, font: { color: muted, size: 15 } },
+                range: view.yRange,
+                tick0: view.yTick0,
+                dtick: view.yDtick,
+                tickfont: { color: text, size: 14 },
+                gridcolor: 'rgba(46,38,35,0.12)',
+                linecolor: text,
+                linewidth: 1,
+                zeroline: true,
+                zerolinecolor: text,
+                zerolinewidth: 1,
+            },
+            showlegend: false,
+            hovermode: false,
+            bargap: 0.35,
+        };
+    };
+
+    const config = {
+        displayModeBar: false,
+        responsive: true,
+    };
+
+    let hasPlotted = false;
+    let currentPlotKey = 'fig6';
+    let currentViewKey = 'target';
+
+    const setSwitchVisible = (visible) => {
+        if (!(switchHost instanceof HTMLElement)) return;
+        switchHost.hidden = !visible;
+    };
+
+    const setActiveTrigger = (plotKey) => {
+        triggerEls.forEach((btn) => {
+            const isActive = btn.getAttribute('data-r2-plot') === plotKey;
+            btn.classList.toggle('is-active', isActive);
+            btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+    };
+
+    const setActiveView = (viewKey) => {
+        const prevKey = currentViewKey;
+        const nextKey = viewKey === 'lure' ? 'lure' : 'target';
+        currentViewKey = nextKey;
+
+        if (switchHost instanceof HTMLElement) {
+            switchHost.setAttribute('data-active', nextKey);
+        }
+
+        switchBtns.forEach((btn) => {
+            const isActive = btn.getAttribute('data-r2-view') === nextKey;
+            btn.classList.toggle('is-active', isActive);
+            btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+
+        return prevKey;
+    };
+
+    const animateToView = (viewKey, prevViewKey = currentViewKey) => {
+        const plot = getPlot(currentPlotKey);
+        const view = getView(currentPlotKey, viewKey);
+
+        const nextTrace = buildTrace(currentPlotKey, viewKey);
+        const nextData = { y: nextTrace.y };
+        if (plot.showN && Array.isArray(view.n)) nextData.customdata = view.n;
+
+        const axisLayout = {
+            'yaxis.title.text': view.yTitle,
+            'yaxis.range': view.yRange,
+            'yaxis.tick0': view.yTick0,
+            'yaxis.dtick': view.yDtick,
+        };
+
+        // Jitter fix:
+        // - Target -> Lure: animate bars first, then rescale axis.
+        // - Lure -> Target (or anything else): rescale axis first, then animate bars.
+        const isTargetToLure = prevViewKey === 'target' && viewKey === 'lure';
+
+        const animateBars = () =>
+            window.Plotly.animate(
+                plotEl,
+                { data: [nextData] },
+                {
+                    transition: { duration: 700, easing: 'cubic-in-out' },
+                    frame: { duration: 700, redraw: false },
+                }
+            );
+
+        if (isTargetToLure) {
+            return Promise.resolve(animateBars()).then(() => window.Plotly.relayout(plotEl, axisLayout));
+        }
+
+        return Promise.resolve(window.Plotly.relayout(plotEl, axisLayout)).then(() => animateBars());
+    };
+
+    const fadeSwapToPlot = (plotKey, viewKey) => {
+        plotEl.classList.add('is-fading');
+        window.setTimeout(() => {
+            window.Plotly.react(plotEl, [buildTrace(plotKey, viewKey)], buildLayout(plotKey, viewKey), config);
+            window.requestAnimationFrame(() => {
+                plotEl.classList.remove('is-fading');
+            });
+        }, 220);
+    };
+
+    const renderPlot = (plotKey, viewKey) => {
+        setSwitchVisible(true);
+
+        if (!hasPlotted) {
+            hasPlotted = true;
+            return window.Plotly.newPlot(plotEl, [buildTrace(plotKey, viewKey)], buildLayout(plotKey, viewKey), config);
+        }
+
+        // Same plot set: animate; switching plot sets: fade swap.
+        if (plotKey === currentPlotKey) {
+            animateToView(viewKey);
+            return;
+        }
+
+        currentPlotKey = plotKey;
+        fadeSwapToPlot(plotKey, viewKey);
+    };
+
+    const setActive = (plotKey) => {
+        const nextKey = plotKey in plots ? plotKey : 'fig6';
+        setActiveTrigger(nextKey);
+
+        // Keep currentViewKey if it exists for the next plot; otherwise reset.
+        const nextPlot = getPlot(nextKey);
+        const nextViewKey = currentViewKey in nextPlot.views ? currentViewKey : 'target';
+        currentViewKey = nextViewKey;
+        setActiveView(nextViewKey);
+
+        renderPlot(nextKey, nextViewKey);
+    };
+
+    triggerEls.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const key = btn.getAttribute('data-r2-plot');
+            if (!key) return;
+            setActive(key);
+        });
+    });
+
+    switchBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const key = btn.getAttribute('data-r2-view');
+            if (!key) return;
+            const prev = setActiveView(key);
+
+            // Always animate within the active plot set, using prev->next to
+            // control sequencing (Target->Lure bars first, then axis).
+            if (currentPlotKey in plots) {
+                animateToView(currentViewKey, prev);
+                return;
+            }
+
+            renderPlot(currentPlotKey, currentViewKey);
+        });
+    });
+
+    // Initialize: prefer any active trigger; otherwise, first.
+    const initialPlotKey =
+        triggerEls.find((el) => el.classList.contains('is-active'))?.getAttribute('data-r2-plot') ||
+        triggerEls[0]?.getAttribute('data-r2-plot') ||
+        'fig6';
+
+    const initialViewKey =
+        switchBtns.find((el) => el.classList.contains('is-active'))?.getAttribute('data-r2-view') || 'target';
+    setActiveView(initialViewKey);
+    setActive(initialPlotKey);
+})();

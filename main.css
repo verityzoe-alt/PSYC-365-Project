@@ -989,3 +989,116 @@ mu .timeline-milestone.is-top .timeline-caption {
         grid-template-columns: 1fr;
     }
 }
+
+/* Discussion */
+.discussion {
+    padding: var(--section-pad-y, 56px) 0;
+}
+
+/* Critique (reuses discussion panels) */
+.critique {
+    padding: var(--section-pad-y, 56px) 0;
+}
+
+.critique-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+    align-items: start;
+}
+
+.critique-takehome {
+    margin-top: 18px;
+}
+
+.discussion-inner {
+    width: min(1100px, calc(100% - 2 * var(--page-pad, 22px)));
+    margin: 0 auto;
+}
+
+.discussion-head {
+    text-align: center;
+    margin-bottom: 26px;
+}
+
+.discussion-heading {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--plum);
+    letter-spacing: 0.08em;
+}
+
+.discussion-subtitle {
+    margin: 10px auto 0;
+    max-width: 65ch;
+    opacity: 0.85;
+}
+
+.discussion-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    align-items: start;
+}
+
+.discussion-panel {
+    padding: 14px 14px 16px;
+    border: 1px solid var(--line, rgba(40, 28, 18, 0.18));
+    border-radius: 14px;
+    background: transparent;
+}
+
+.discussion-title {
+    margin: 2px 0 12px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--plum);
+    font-size: 0.98rem;
+    letter-spacing: 0.04em;
+}
+
+.discussion-blocks {
+    display: grid;
+    gap: 12px;
+}
+
+.discussion-block {
+    padding: 12px 0;
+    border-top: 1px solid var(--line, rgba(40, 28, 18, 0.18));
+}
+
+.discussion-block:first-child {
+    border-top: 0;
+    padding-top: 2px;
+}
+
+.discussion-text {
+    margin: 0;
+    line-height: 1.55;
+}
+
+.discussion-callouts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 18px;
+}
+
+.discussion-callout {
+    padding: 14px 14px 16px;
+    border: 1px solid var(--line, rgba(40, 28, 18, 0.18));
+    border-radius: 14px;
+}
+
+@media (max-width: 750px) {
+
+    .discussion-grid,
+    .discussion-callouts {
+        grid-template-columns: 1fr;
+    }
+
+    .critique-grid {
+        grid-template-columns: 1fr;
+    }
+}

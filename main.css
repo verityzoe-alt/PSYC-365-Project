@@ -410,6 +410,8 @@ mu .timeline-milestone.is-top .timeline-caption {
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
     align-items: start;
+    display: flex;
+    align-items: stretch;
 }
 
 .vars-card {
@@ -455,6 +457,15 @@ mu .timeline-milestone.is-top .timeline-caption {
     color: var(--text);
     font-size: 1.125rem;
     line-height: 1.5;
+}
+
+.vars-divider {
+  width: 1px;
+  background-color: #d4c9b8;
+  align-self: stretch;
+  margin: 0 1rem;
+  margin-top: 8rem;
+  margin-bottom: 1rem;
 }
 
 /* Intro / Previous Research */

@@ -414,6 +414,77 @@ a {
     letter-spacing: -0.03em;
 }
 
+/* AI Declaration */
+.ai-declaration {
+    padding: 80px 0 140px;
+}
+
+/* Citation */
+.citation {
+    padding: 120px 0 40px;
+}
+
+.citation-text {
+    margin: 0 auto;
+    text-align: left;
+    padding-left: 60px;
+    /* Indents the entire block */
+    text-indent: -60px;
+    /* Pulls only the first line back */
+}
+
+.citation-heading {
+    margin: 0 0 14px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.citation-line {
+    margin: 0;
+    font-family: var(--font-body);
+    color: var(--text);
+    line-height: 1.65;
+    font-size: 1.5rem;
+}
+
+.citation-line:first-of-type {
+    /* APA-style hanging indent: first line flush, subsequent lines indented */
+    padding-left: 2.25rem;
+    text-indent: -2.25rem;
+}
+
+.citation-line+.citation-line {
+    margin-top: 10px;
+}
+
+.citation-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.citation-link:hover {
+    text-decoration: underline;
+}
+
+.ai-declaration-box {
+    border: 2px solid var(--plum);
+    border-radius: 18px;
+    padding: 16px;
+    background: transparent;
+}
+
+.ai-declaration-text {
+    margin: 0;
+    font-family: var(--font-heading);
+    color: var(--plum);
+    font-size: 1.5rem;
+    line-height: 1.55;
+}
+
 /* Research Questions + q-and-h */
 .q-and-h {
     display: grid;

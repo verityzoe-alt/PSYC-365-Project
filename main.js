@@ -259,6 +259,48 @@
 })();
 
 (() => {
+    const host = document.querySelector('[data-site-menu]');
+    if (!(host instanceof HTMLElement)) return;
+
+    const toggle = host.querySelector('[data-menu-toggle]');
+    const menu = host.querySelector('#site-menu');
+    if (!(toggle instanceof HTMLButtonElement)) return;
+    if (!(menu instanceof HTMLElement)) return;
+
+    const setOpen = (next) => {
+        menu.classList.toggle('is-open', next);
+        toggle.setAttribute('aria-expanded', String(next));
+        toggle.setAttribute('aria-label', next ? 'Close menu' : 'Open menu');
+    };
+
+    const isOpen = () => menu.classList.contains('is-open');
+
+    toggle.addEventListener('click', () => setOpen(!isOpen()));
+
+    menu.addEventListener('click', (e) => {
+        const target = e.target;
+        if (!(target instanceof HTMLElement)) return;
+        if (target.closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!isOpen()) return;
+        const target = e.target;
+        if (!(target instanceof Node)) return;
+        if (host.contains(target)) return;
+        setOpen(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (!(e instanceof KeyboardEvent)) return;
+        if (e.key !== 'Escape') return;
+        if (!isOpen()) return;
+        setOpen(false);
+        toggle.focus();
+    });
+})();
+
+(() => {
     const cards = Array.from(document.querySelectorAll('[data-flip-card]'));
     if (cards.length === 0) return;
 

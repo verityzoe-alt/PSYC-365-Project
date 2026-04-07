@@ -171,6 +171,28 @@ a {
     transform: rotate(var(--arrow-rotate, 45deg));
 }
 
+/* Footer */
+.site-footer {
+    margin-top: 0;
+    background: var(--text);
+    color: var(--surface);
+}
+
+.site-footer-inner {
+    padding-block: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.site-footer-left,
+.site-footer-right {
+    font-family: var(--font-body);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
 /* Image test */
 .image-test {
     padding: 60px 0;

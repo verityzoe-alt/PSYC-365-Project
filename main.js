@@ -1,4 +1,52 @@
 (() => {
+    // Site-wide reveal: mark sections/divs automatically, but keep the hero static.
+    const candidates = Array.from(document.querySelectorAll('section, div'));
+    candidates.forEach((el) => {
+        if (!(el instanceof HTMLElement)) return;
+
+        // Keep hero (and everything inside it) static.
+        if (el.closest('.hero')) return;
+
+        // Avoid revealing the tooltip element (it manages its own visibility).
+        if (el.classList.contains('tooltip')) return;
+
+        // If a dev already opted-in/out, respect explicit markup.
+        if (el.hasAttribute('data-reveal')) return;
+
+        el.setAttribute('data-reveal', '');
+    });
+
+    const revealEls = Array.from(document.querySelectorAll('[data-reveal]'));
+    if (!revealEls.length) return;
+
+    const reduceMotion =
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+
+    if (!('IntersectionObserver' in window)) {
+        revealEls.forEach((el) => el.classList.add('is-visible'));
+        return;
+    }
+
+    const io = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+            });
+        },
+        {
+            root: null,
+            threshold: 0.12,
+            rootMargin: '0px 0px -10% 0px',
+        }
+    );
+
+    revealEls.forEach((el) => io.observe(el));
+})();
+
+(() => {
     const root = document.querySelector('[data-carousel="intro"]');
     if (!(root instanceof HTMLElement)) return;
 

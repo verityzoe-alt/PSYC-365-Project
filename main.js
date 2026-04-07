@@ -1,4 +1,6 @@
 (() => {
+    const root = document.documentElement;
+
     // Site-wide reveal: mark sections/divs automatically, but keep the hero static.
     const candidates = Array.from(document.querySelectorAll('section, div'));
     candidates.forEach((el) => {
@@ -6,6 +8,14 @@
 
         // Keep hero (and everything inside it) static.
         if (el.closest('.hero')) return;
+
+        // Keep footer (and everything inside it) static.
+        if (el.closest('.site-footer')) {
+            // If this element previously got opted into reveal, remove it.
+            if (el.hasAttribute('data-reveal')) el.removeAttribute('data-reveal');
+            el.classList.remove('is-visible');
+            return;
+        }
 
         // Avoid revealing the tooltip element (it manages its own visibility).
         if (el.classList.contains('tooltip')) return;
@@ -16,12 +26,23 @@
         el.setAttribute('data-reveal', '');
     });
 
+    // Also ensure nested footer elements (that might not be section/div) don't get revealed.
+    document.querySelectorAll('.site-footer [data-reveal]').forEach((el) => {
+        if (!(el instanceof HTMLElement)) return;
+        el.removeAttribute('data-reveal');
+        el.classList.remove('is-visible');
+    });
+
     const revealEls = Array.from(document.querySelectorAll('[data-reveal]'));
     if (!revealEls.length) return;
 
     const reduceMotion =
         window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduceMotion) return;
+
+    // Opt-in to the hidden-by-default reveal styles only when JS is active
+    // and the user hasn't requested reduced motion.
+    root.classList.add('reveal-ready');
 
     if (!('IntersectionObserver' in window)) {
         revealEls.forEach((el) => el.classList.add('is-visible'));
@@ -44,6 +65,32 @@
     );
 
     revealEls.forEach((el) => io.observe(el));
+
+    const revealIfInView = () => {
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        const vw = window.innerWidth || document.documentElement.clientWidth;
+
+        revealEls.forEach((el) => {
+            if (el.classList.contains('is-visible')) return;
+
+            const rect = el.getBoundingClientRect();
+            const isInViewport =
+                rect.bottom >= vh * 0.12 &&
+                rect.top <= vh * 0.9 &&
+                rect.right >= 0 &&
+                rect.left <= vw;
+
+            if (!isInViewport) return;
+            el.classList.add('is-visible');
+            io.unobserve(el);
+        });
+    };
+
+    // Catch elements that start in-view (or become in-view due to scroll restoration)
+    // without requiring a scroll/resize event.
+    window.requestAnimationFrame(revealIfInView);
+    window.addEventListener('load', revealIfInView, { once: true });
+    window.addEventListener('pageshow', revealIfInView);
 })();
 
 (() => {

@@ -77,8 +77,14 @@ a {
     text-decoration: none;
 }
 
-/* Scroll reveal */
+/* Scroll reveal (progressive enhancement)
+   Default: visible. JS adds `html.reveal-ready` to opt-in. */
 [data-reveal] {
+    opacity: 1;
+    transform: none;
+}
+
+html.reveal-ready [data-reveal] {
     opacity: 0;
     transform: translateY(14px);
     transition:
@@ -87,13 +93,13 @@ a {
     will-change: opacity, transform;
 }
 
-[data-reveal].is-visible {
+html.reveal-ready [data-reveal].is-visible {
     opacity: 1;
     transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
-    [data-reveal] {
+    html.reveal-ready [data-reveal] {
         transition: none;
         transform: none;
         opacity: 1;
@@ -979,7 +985,7 @@ mu .timeline-milestone.is-top .timeline-caption {
     padding: 0;
     display: grid;
     gap: 0.5rem;
-    padding-top: 5rem;
+    padding-top: 2rem;
 
 }
 
@@ -1714,33 +1720,6 @@ mu .timeline-milestone.is-top .timeline-caption {
 }
 
 
-@media (max-width: 750px) {
-
-    .discussion-grid,
-    .discussion-callouts {
-        grid-template-columns: 1fr;
-    }
-
-    .discussion-tablist {
-        padding: 0;
-    }
-
-    .critique-block {
-        grid-template-columns: 1fr;
-        gap: 14px;
-    }
-
-    .critique-block--flip .critique-info,
-    .critique-block--flip .critique-graphic {
-        order: initial;
-    }
-
-    .critique-graphic {
-        min-height: 200px;
-    }
-}
-
-
 @media (prefers-reduced-motion: reduce) {
     .qh-card-inner {
         transition: none;
@@ -1756,9 +1735,17 @@ mu .timeline-milestone.is-top .timeline-caption {
     }
 }
 
-@media (max-width: 750px) {
+@media (max-width: 768px) {
+    .hero {
+        padding: 120px 0;
+    }
+
     .hero-title {
-        font-size: 2rem;
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
     }
 
     .design-heading {
@@ -1794,18 +1781,73 @@ mu .timeline-milestone.is-top .timeline-caption {
         padding: 2.5rem 0;
     }
 
+    .q-and-h-aside {
+        order: -1;
+        padding-top: 14rem;
+    }
+
+    .q-and-h-heading {
+        bottom: 0;
+    }
+
+    .q-and-h-aside-graphic {
+        width: clamp(8rem, 40%, 11rem);
+        top: 4rem;
+    }
+
     .results-heading {
-        font-size: 2.25rem;
+        font-size: 3.5rem;
     }
 
     .results-h1 {
         grid-template-columns: 1fr;
         gap: 1.5rem;
+        grid-template-areas:
+            "summary"
+            "plot";
+    }
+
+    .results-r1-left {
+        grid-area: plot;
+        min-height: auto;
+        padding-right: 0;
+        display: grid;
+        justify-items: center;
+    }
+
+    .results-h1-right {
+        grid-area: summary;
     }
 
     .results-h1-right {
         justify-self: start;
         width: 100%;
+    }
+
+    .results-plot {
+        min-height: 25rem;
+        max-width: 30rem;
+        margin-inline: auto;
+    }
+
+    .results-block {
+        padding: 1.25rem 0;
+    }
+
+    .results-h1--dense .results-block {
+        padding: 1rem 0;
+    }
+
+    .discussion-heading {
+        padding-top: 0;
+    }
+
+    .discussion-head-graphic {
+        top: -15rem;
+    }
+
+    .critique-head-graphic {
+        top: -13.5rem;
     }
 
     .intro-main {
@@ -1816,6 +1858,11 @@ mu .timeline-milestone.is-top .timeline-caption {
         grid-template-columns: 1fr;
     }
 
+    .intro-point p {
+        font-size: 1.15rem;
+        line-height: 1.4;
+    }
+
     .design-variables {
         grid-template-columns: 1fr;
     }
@@ -1824,13 +1871,60 @@ mu .timeline-milestone.is-top .timeline-caption {
         display: none;
     }
 
+    .vars-card {
+        padding-top: 1rem;
+    }
+
     .vars-card:first-child,
     .vars-card:last-child {
         padding-left: 0;
         padding-right: 0;
     }
 
+    .vars-text,
+    .vars-list {
+        padding-left: 1.25rem;
+    }
+
     .qh-text {
-        font-size: 1.35rem;
+        font-size: 1.15rem;
+        margin-block: 0;
+    }
+
+    .qh-card-inner {
+        min-height: 7.5rem;
+    }
+
+    .qh-face {
+        padding: 12px 14px;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .discussion-grid,
+    .discussion-callouts {
+        grid-template-columns: 1fr;
+    }
+
+    .discussion-tablist {
+        padding: 0;
+    }
+
+    .critique-block {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .critique-block--flip .critique-info,
+    .critique-block--flip .critique-graphic {
+        order: initial;
+    }
+
+    .critique-graphic {
+        min-height: 200px;
+    }
+
+    .critique-graphic {
+        display: none;
     }
 }

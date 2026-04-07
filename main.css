@@ -714,7 +714,7 @@ a {
 
 .timeline-bracket--surveys .timeline-bracket-label {
     top: calc(1rem + var(--timeline-surveys-offset));
-    left: 30%;
+    left: 25%;
 }
 
 .timeline-milestone {

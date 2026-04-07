@@ -31,6 +31,7 @@
         <section class="intro" aria-label="Paper intro">
             <!-- left div: 40% of full screen/viewport, heading (centered within div), font-heading, one of the colors from the global vars i'm not sure which -->
             <div class="intro-aside">
+                <img class="intro-aside-graphic" src="./img/Sleep music.png" alt="Illustration of a bear resting" />
                 <h2 class="intro-heading">I. PREVIOUS RESEARCH</h2>
             </div>
 
@@ -43,8 +44,7 @@
                         <li class="intro-point is-active" data-carousel-item>
                             <p>
                                 <strong>1)</strong> Music has been suggested to enhance memory consolidation by inducing
-                                <strong>emotional
-                                    arousal</strong>, known as the <strong>emotional arousal hypothesis.</strong>
+                                emotional arousal, known as the <strong>emotional arousal hypothesis.</strong>
                             </p>
                         </li>
                         <li class="intro-point" data-carousel-item>
@@ -64,21 +64,16 @@
                         <li class="intro-point" data-carousel-item>
                             <p>
                                 <strong>4)</strong> In studying episodic memory, <strong>mnemonic discrimination
-                                    tasks</strong> are often
-                                used to isolate detail-based <strong>pattern separation</strong> from gist-based
-                                <strong>pattern completion.</strong>
+                                    tasks (MDTs)</strong> are often used to isolate detail-based <strong>pattern
+                                    separation</strong> from gist-based <strong>pattern completion.</strong>
                             </p>
                         </li>
                     </ul>
 
-                    <div class="intro-carousel-controls">
-                        <button class="icon-button" type="button" data-carousel-prev aria-label="Previous point">
-                            ↑
-                        </button>
-                        <button class="icon-button" type="button" data-carousel-next aria-label="Next point">
-                            ↓
-                        </button>
-                    </div>
+                    <button class="icon-button intro-more" type="button" data-carousel-next
+                        aria-label="Reveal next point">
+                        ↓
+                    </button>
                 </div>
             </div>
         </section>
@@ -156,6 +151,7 @@
 
             <div class="q-and-h-aside">
                 <!-- right side: aside for heading, similar to intro section -->
+                <img class="q-and-h-aside-graphic" src="./img/Clap music.png" alt="Illustration of a bear clapping" />
                 <h2 class="q-and-h-heading">II. RESEARCH QUESTION <br><span class="and">&</span> HYPOTHESIS</h2>
             </div>
         </section>
@@ -164,8 +160,9 @@
         <section class="design" aria-label="Experimental design">
             <div class="design-inner">
                 <div class="design-head">
+                    <img class="design-head-graphic" src="./img/Walk music.png" alt="Illustration of a bear walking" />
                     <h2 class="design-heading">III. EXPERIMENTAL DESIGN</h2>
-                    <p class="design-subtitle">Click a milestone to see details.</p>
+                    <p class="design-subtitle">Click on a milestone to see details!</p>
                 </div>
 
                 <div class="timeline" data-timeline>
@@ -339,10 +336,10 @@
                     <p class="vars-text">6 auditory conditions:</p>
                     <ul class="vars-list">
                         <li>4 <strong>high-arousal music</strong> conditions, stratified by <em>emotional valence</em>
-                            and
-                            <em>familiarity</em>.
+                            and <em>familiarity</em>: positive high familiarity (P-HF), negative high familiarity
+                            (N-HF), positive low familiarity (P-LF), negative low familiarity (N-LF).
                         </li>
-                        <li>1 <strong>neutral non-music</strong> condition.</li>
+                        <li>1 <strong>neutral sound</strong> condition.</li>
                         <li>1 <strong>silent</strong> condition.</li>
                     </ul>
                 </div>
@@ -360,7 +357,7 @@
                     </ul>
                 </div>
             </div>
-
+            <!-- 
             <div class="affect-grid-section">
                 <div class="ag-outer">
                     <div class="ag-yaxis">Arousal Level</div>
@@ -376,13 +373,15 @@
                     </div>
                 </div>
             </div>
-            <div class="ag-tooltip" id="agTip"></div>
+            <div class="ag-tooltip" id="agTip"></div> -->
 
         </section>
 
         <section class="results" aria-label="Results">
             <div class="results-inner">
                 <div class="results-head">
+                    <img class="results-head-graphic" src="./img/Curve music.png"
+                        alt="Illustration of a bear listening to music" />
                     <h2 class="results-heading">IV. RESULTS</h2>
                 </div>
 
@@ -392,78 +391,94 @@
                     </div>
 
                     <div class="results-h1-right" aria-label="R1 summary">
-                        <h3 class="results-h1-title">R1: memory vs. emotional arousal</h3>
+                        <h3 class="results-h1-title">H1: music induces emotional arousal.</h3>
 
                         <div class="results-blocks" role="list" aria-label="R1 findings">
                             <button class="results-block results-block-trigger is-active" type="button" role="listitem"
                                 data-r1-plot="baseline" aria-pressed="true">
                                 <p class="results-block-text">At baseline, there was no difference between music and
                                     control groups.</p>
+                                <span class="results-block-cta" aria-hidden="true"></span>
                             </button>
                             <button class="results-block results-block-trigger" type="button" role="listitem"
                                 data-r1-plot="post" aria-pressed="false">
                                 <p class="results-block-text">Post-treatment, the music group showed significantly
-                                    higher arousal than control.</p>
+                                    higher arousal than control. So yes, music appears to have induced emotional
+                                    arousal!</p>
+                                <span class="results-block-cta" aria-hidden="true"></span>
                             </button>
-                            <button class="results-block results-block-trigger" type="button" role="listitem"
-                                data-r1-plot="conditions" aria-pressed="false">
-                                <p class="results-block-text">Across experimental conditions, N-HF, P-LF, and N-LF
-                                    exhibited increases in arousal relative to Silent, Neutral, and P-HF.</p>
-                            </button>
-                            <div class="results-block" role="listitem">
-                                <p class="results-block-text">There were individual differences in music-induced
-                                    emotional arousal; not all participants increased in arousal from listening to
-                                    music, with some showing decreases instead.</p>
-                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="results-h1 results-h1--flip" aria-label="R2 results">
+                <div class="results-h1 results-h1--flip results-h1--compact-plot" aria-label="R2 results">
                     <div class="results-h1-right results-h1-right--left" aria-label="R2 summary">
-                        <h3 class="results-h1-title">R2: emotional arousal vs. memory</h3>
+                        <h3 class="results-h1-title">H2: negative valence and familiarity induce stronger emotional
+                            arousal.</h3>
 
                         <div class="results-blocks" role="list" aria-label="R2 findings">
                             <div class="results-block" role="listitem">
-                                <p class="results-block-text">There were no significant differences in memory across
-                                    experimental groups for either target recognition or lure
-                                    discrimination.</p>
+                                <p class="results-block-text">Across experimental conditions, N-HF, P-LF, and N-LF
+                                    exhibited increases in arousal relative to Silent, Neutral, and P-HF.</p>
                             </div>
                             <div class="results-block" role="listitem">
-                                <p class="results-block-text">However, to account for the individual differences in
+                                <p class="results-block-text">However, there were individual differences in
+                                    music-induced
+                                    emotional arousal; not all participants increased in arousal from listening to
+                                    music, with some showing decreases instead!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="results-r1-left results-r1-left--right" aria-label="R2 visual area">
+                        <div class="results-plot" id="plot-r2" aria-label="R2 plot"></div>
+                    </div>
+                </div>
+
+                <div class="results-h1 results-h1--dense" aria-label="R3 results">
+                    <div class="results-r1-left" aria-label="R3 visual area">
+                        <div class="results-switch" data-r3-view-switch hidden aria-label="R3 figure switch">
+                            <button class="results-switch-btn is-active" type="button" data-r3-view="target"
+                                aria-pressed="true">Target recognition</button>
+                            <button class="results-switch-btn" type="button" data-r3-view="lure"
+                                aria-pressed="false">Lure discrimination</button>
+                        </div>
+                        <div class="results-plot" id="plot-r3" aria-label="R3 plot"></div>
+                    </div>
+
+                    <div class="results-h1-right" aria-label="R3 summary">
+                        <h3 class="results-h1-title">H3: emotional arousal influences memory at a tradeoff.</h3>
+
+                        <div class="results-blocks" role="list" aria-label="R3 findings">
+                            <div class="results-block" role="listitem">
+                                <p class="results-block-text">There were no significant differences in memory across
+                                    experimental groups for either target recognition or lure
+                                    discrimination. However, to account for the individual differences in
                                     arousal, participants were <strong>clustered</strong> based on their emotional
                                     arousal score change from baseline to post-treatment.</p>
                             </div>
                             <button class="results-block results-block-trigger is-active" type="button" role="listitem"
-                                data-r2-plot="fig6" aria-pressed="true">
+                                data-r3-plot="fig6" aria-pressed="true">
                                 <p class="results-block-text">In music groups, three clusters emerged: one
-                                    <strong>low</strong> cluster that showed a decrease in arousal, one
-                                    <strong>medium</strong>
-                                    with a moderate increase, and one <strong>high</strong> with a strong increase.
+                                    <strong>low-decrease</strong> cluster that showed a decrease in arousal, one
+                                    <strong>medium-increase</strong> with a moderate increase, and one
+                                    <strong>high-increase</strong> with a strong increase.
                                     This time there were significant differences: low and high clusters were
                                     better at target recognition, but worse at lure discrimination than the moderate
                                     cluster!
                                 </p>
+                                <span class="results-block-cta" aria-hidden="true"></span>
                             </button>
                             <button class="results-block results-block-trigger" type="button" role="listitem"
-                                data-r2-plot="fig7" aria-pressed="false">
+                                data-r3-plot="fig7" aria-pressed="false">
                                 <p class="results-block-text">In control groups, there were two clusters: one
                                     <strong>moderate-increase</strong> and one <strong>moderate-decrease</strong>.
                                     Interestingly, the decrease cluster significantly outperformed the increase cluster
                                     in both target recognition and lure discrimination.
                                 </p>
+                                <span class="results-block-cta" aria-hidden="true"></span>
                             </button>
                         </div>
-                    </div>
-
-                    <div class="results-r1-left" aria-label="R2 visual area">
-                        <div class="results-switch" data-r2-view-switch hidden aria-label="R2 figure switch">
-                            <button class="results-switch-btn is-active" type="button" data-r2-view="target"
-                                aria-pressed="true">Target recognition</button>
-                            <button class="results-switch-btn" type="button" data-r2-view="lure"
-                                aria-pressed="false">Lure discrimination</button>
-                        </div>
-                        <div class="results-plot" id="plot-r2" aria-label="R2 plot"></div>
                     </div>
                 </div>
             </div>
@@ -472,6 +487,8 @@
         <section class="discussion" aria-label="Discussion">
             <div class="discussion-inner">
                 <div class="discussion-head">
+                    <img class="discussion-head-graphic" src="./img/Sit music.png"
+                        alt="Illustration of a bear listening to music" />
                     <h2 class="discussion-heading">V. DISCUSSION</h2>
                 </div>
 
@@ -499,30 +516,24 @@
                             aria-labelledby="tab-interpretation" data-discussion-panel="interpretation">
                             <div class="discussion-cards" role="list">
                                 <div class="discussion-card" role="listitem">
-                                    <p class="discussion-text">The authors interpret their findings as evidence that
-                                        <strong>music-induced emotional arousal does not uniformly enhance
-                                            memory</strong>,
-                                        but can create a trade-off between general <strong>“gist”</strong> memory and
-                                        specific <strong>“detail”</strong> memory.
+                                    <p class="discussion-text">Music-induced emotional arousal <strong>does not
+                                            uniformly</strong> enhance
+                                        memory, but creates a tradeoff between "gist" and "detailed" memory.
                                     </p>
                                 </div>
                                 <div class="discussion-card" role="listitem">
-                                    <p class="discussion-text">They conclude the relationship follows a
-                                        <strong>non-linear,
-                                            quadratic</strong> pattern consistent with the <strong>Yerkes–Dodson
-                                            law</strong>: <strong>moderate</strong> increases in arousal are “optimal”
-                                        for
-                                        detailed memory (pattern separation), while <strong>more extreme</strong>
-                                        increases
-                                        or decreases favor general recognition.
+                                    <p class="discussion-text">The arousal-memory relationship follows a
+                                        <strong>non-linear, quadratic</strong> pattern consistent with the
+                                        <strong>Yerkes–Dodson law</strong>: moderate increases in arousal are “optimal”
+                                        for detailed memory (pattern separation), while high increases or decreases
+                                        favor general recognition.
                                     </p>
                                 </div>
                                 <div class="discussion-card" role="listitem">
-                                    <p class="discussion-text">They also emphasize that <strong>individual subjective
-                                            responses</strong> matter more than the specific type of music played: the
-                                        same
-                                        song can lead to different memory outcomes depending on the listener’s unique
-                                        emotional reaction.</p>
+                                    <p class="discussion-text">Individual subjective
+                                        responses matter more than the specific type of music played: the
+                                        same song can lead to different memory outcomes depending on the listener’s
+                                        unique emotional reaction.</p>
                                 </div>
                             </div>
                         </div>
@@ -601,8 +612,9 @@
         <section class="critique" aria-label="Critique">
             <div class="discussion-inner">
                 <div class="discussion-head">
+                    <img class="critique-head-graphic" src="./img/Howl.png"
+                        alt="Illustration of a bear listening to music" />
                     <h2 class="discussion-heading">VI. CRITIQUE</h2>
-                    <p class="discussion-subtitle">Strengths, limitations, and where this line of work goes next.</p>
                 </div>
 
                 <div class="critique-block critique-block--strengths" aria-label="Strengths">
@@ -631,7 +643,8 @@
                         </div>
                     </div>
                     <div class="critique-graphic" aria-label="Strengths graphic area">
-                        <div class="critique-graphic-placeholder" aria-hidden="true">Graphic</div>
+                        <img class="critique-icon critique-icon--up" src="./img/thumb-up.png" alt=""
+                            aria-hidden="true" />
                     </div>
                 </div>
 
@@ -657,7 +670,8 @@
                         </div>
                     </div>
                     <div class="critique-graphic" aria-label="Weaknesses graphic area">
-                        <div class="critique-graphic-placeholder" aria-hidden="true">Graphic</div>
+                        <img class="critique-icon critique-icon--down" src="./img/thumb-down.png" alt=""
+                            aria-hidden="true" />
                     </div>
                 </div>
 
@@ -689,7 +703,8 @@
                         </div>
                     </div>
                     <div class="critique-graphic" aria-label="Future directions graphic area">
-                        <div class="critique-graphic-placeholder" aria-hidden="true">Graphic</div>
+                        <img class="critique-icon critique-icon--vane" src="./img/wind-vane.png" alt=""
+                            aria-hidden="true" />
                     </div>
                 </div>
             </div>

@@ -4,116 +4,234 @@
 
     const items = Array.from(root.querySelectorAll('[data-carousel-item]'));
     const list = root.querySelector('[data-carousel-list]');
-    const prevBtn = root.querySelector('[data-carousel-prev]');
     const nextBtn = root.querySelector('[data-carousel-next]');
 
-    if (!list || !(prevBtn instanceof HTMLButtonElement) || !(nextBtn instanceof HTMLButtonElement)) return;
+    if (!list || !(nextBtn instanceof HTMLButtonElement)) return;
     if (items.length === 0) return;
 
-    let index = items.findIndex((el) => el.classList.contains('is-active'));
-    if (index < 0) index = 0;
-
-    let isAnimating = false;
-
-    const cleanupClasses = (el) => {
-        el.classList.remove('is-entering-up', 'is-entering-down', 'is-leaving-up', 'is-leaving-down');
-    };
+    // Unrolling model: N items are revealed and stay on screen.
+    let revealedCount = 1;
 
     const updateButtons = () => {
-        prevBtn.disabled = index === 0;
-        nextBtn.disabled = index === items.length - 1;
+        const isDone = revealedCount >= items.length;
+        nextBtn.hidden = isDone;
+        nextBtn.disabled = isDone;
+        nextBtn.setAttribute('aria-hidden', String(isDone));
     };
 
-    const setIndex = (nextIndex) => {
-        const clamped = Math.max(0, Math.min(items.length - 1, nextIndex));
-        if (clamped === index) {
-            updateButtons();
-            return;
+    const syncAriaHidden = () => {
+        items.forEach((el, i) => {
+            const isRevealed = i < revealedCount;
+            el.setAttribute('aria-hidden', String(!isRevealed));
+        });
+    };
+
+    const setRevealedCount = (nextCount) => {
+        const next = Math.max(1, Math.min(items.length, nextCount));
+        if (next <= revealedCount) return; // no roll-up
+
+        const prev = revealedCount;
+        revealedCount = next;
+
+        // Reveal only: unhide + animate open
+        for (let i = prev; i < next; i += 1) {
+            const el = items[i];
+            if (!el) continue;
+            el.hidden = false;
+            el.classList.remove('is-revealed');
+            window.requestAnimationFrame(() => {
+                if (i < revealedCount) el.classList.add('is-revealed');
+            });
         }
-        if (isAnimating) return;
 
-        const direction = clamped > index ? 'down' : 'up';
-        const current = items[index];
-        const next = items[clamped];
-        if (!current || !next) return;
-
-        isAnimating = true;
-
-        // Prepare next slide in an offset position.
-        cleanupClasses(current);
-        cleanupClasses(next);
-
-        next.classList.add('is-active');
-        next.classList.add(direction === 'down' ? 'is-entering-up' : 'is-entering-down');
-        next.setAttribute('aria-hidden', 'false');
-
-        // Force the browser to apply initial styles before animating.
-        void next.offsetHeight;
-
-        current.classList.add(direction === 'down' ? 'is-leaving-up' : 'is-leaving-down');
-        next.classList.remove(direction === 'down' ? 'is-entering-up' : 'is-entering-down');
-
-        const onDone = () => {
-            current.classList.remove('is-active');
-            current.setAttribute('aria-hidden', 'true');
-            cleanupClasses(current);
-            cleanupClasses(next);
-
-            index = clamped;
-            updateButtons();
-            isAnimating = false;
-        };
-
-        // Use a single timeout as a robust end signal.
-        window.setTimeout(onDone, 360);
+        syncAriaHidden();
+        updateButtons();
     };
 
-    // Initialize aria-hidden and buttons.
+    // Initialize.
+    const initialIndex = Math.max(0, items.findIndex((el) => el.classList.contains('is-active')));
+    revealedCount = Math.max(1, initialIndex + 1);
     items.forEach((el, i) => {
-        el.setAttribute('aria-hidden', String(i !== index));
-        el.classList.toggle('is-active', i === index);
-        cleanupClasses(el);
+        const isRevealed = i < revealedCount;
+        el.hidden = !isRevealed;
+        el.classList.toggle('is-revealed', isRevealed);
     });
+    syncAriaHidden();
     updateButtons();
 
-    prevBtn.addEventListener('click', () => setIndex(index - 1));
-    nextBtn.addEventListener('click', () => setIndex(index + 1));
-
-    // Scroll-to-advance (when hovering the carousel).
-    let wheelLock = false;
-    root.addEventListener(
-        'wheel',
-        (e) => {
-            if (!(e instanceof WheelEvent)) return;
-            if (wheelLock) return;
-
-            // Only treat meaningful vertical scroll as navigation.
-            if (Math.abs(e.deltaY) < 6) return;
-            e.preventDefault();
-
-            wheelLock = true;
-            window.setTimeout(() => {
-                wheelLock = false;
-            }, 180);
-
-            if (e.deltaY > 0) setIndex(index + 1);
-            else setIndex(index - 1);
-        },
-        { passive: false }
-    );
+    nextBtn.addEventListener('click', () => setRevealedCount(revealedCount + 1));
 
     // Keyboard support when focused inside.
     root.addEventListener('keydown', (e) => {
         if (!(e instanceof KeyboardEvent)) return;
         if (e.key === 'ArrowDown') {
             e.preventDefault();
-            setIndex(index + 1);
-        }
-        if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            setIndex(index - 1);
+            setRevealedCount(revealedCount + 1);
         }
     });
+})();
+
+(() => {
+    const TERM_DEFS = new Map([
+        ['emotional arousal hypothesis', 'The hypothesis that post-encoding emotional arousal trigger norepinephrine and cortisol release, which modulate memory via the hippocampus and basolateral amygdala.'],
+        ['Yerkes-Dodson law', 'Cognitive performance peaks at moderate arousal but declines if arousal is too high or low, resembling an inverted U-shape curve.'],
+        ['pattern separation', 'A hippocampal process that keeps similar experiences distinct (supports detailed discrimination).'],
+        ['pattern completion', 'A process that fills in missing information to recognize something as familiar (supports gist/general recognition).'],
+        ['mnemonic discrimination tasks (MDTs)', 'A long-term episodic memory task that include “lure” stimuli in the testing phase.'],
+    ]);
+
+    const ROOT_SELECTORS = [
+        '.intro-point p',
+    ];
+
+    const normalize = (text) =>
+        text
+            .toLowerCase()
+            .replace(/[“”"']/g, '')
+            .replace(/\s+/g, ' ')
+            .replace(/\s*\([^)]*\)\s*/g, ' ') // drop parenthetical abbreviations like (MDTs)
+            .replace(/\s+/g, ' ')
+            .trim();
+
+    const findDefinitionForStrong = (strongEl) => {
+        const raw = (strongEl.textContent || '').trim();
+        if (!raw) return null;
+
+        // Common case: headings like "No “One-Size-Fits-All”:" → strip trailing punctuation.
+        const cleaned = raw.replace(/[:.]+\s*$/g, '').trim();
+        const key = normalize(cleaned);
+
+        for (const [term, def] of TERM_DEFS.entries()) {
+            if (normalize(term) === key) return { term: cleaned, def };
+        }
+        return null;
+    };
+
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip';
+    tooltip.setAttribute('role', 'tooltip');
+    tooltip.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(tooltip);
+
+    const tooltipId = 'tooltip-' + Math.random().toString(16).slice(2);
+    tooltip.id = tooltipId;
+
+    let activeEl = null;
+    let activeAnchorX = null;
+
+    const placeTooltip = (target, anchorX = null) => {
+        const rect = target.getBoundingClientRect();
+        const margin = 10;
+
+        // Reset position so measurement isn't affected by previous clamp.
+        tooltip.style.left = '0px';
+        tooltip.style.top = '0px';
+
+        // Measure after un-hiding
+        const tipRect = tooltip.getBoundingClientRect();
+
+        const anchor = typeof anchorX === 'number' ? anchorX : rect.left + rect.width / 2;
+        const centeredLeft = anchor - tipRect.width / 2;
+        const clampedLeft = Math.max(margin, Math.min(centeredLeft, window.innerWidth - tipRect.width - margin));
+
+        const aboveTop = rect.top - tipRect.height - margin;
+        const belowTop = rect.bottom + margin;
+
+        const placeAbove = aboveTop >= margin;
+        const top = placeAbove ? aboveTop : Math.min(belowTop, window.innerHeight - tipRect.height - margin);
+
+        tooltip.style.left = `${Math.round(clampedLeft)}px`;
+        tooltip.style.top = `${Math.round(top)}px`;
+
+        // Arrow
+        const arrowSize = 10;
+        const arrowCenter = anchor;
+        const arrowLeft = Math.max(
+            14,
+            Math.min(arrowCenter - clampedLeft - arrowSize / 2, tipRect.width - 24)
+        );
+        tooltip.style.setProperty('--arrow-left', `${Math.round(arrowLeft)}px`);
+        tooltip.style.setProperty('--arrow-top', placeAbove ? `${tipRect.height - 6}px` : `-6px`);
+        tooltip.style.setProperty('--arrow-rotate', placeAbove ? '225deg' : '45deg');
+
+        tooltip.style.setProperty('--arrow-border-top', placeAbove ? '0' : '');
+    };
+
+    // Use CSS vars for arrow positioning.
+    const applyArrowVars = () => {
+        tooltip.style.setProperty('--arrow-left', '24px');
+        tooltip.style.setProperty('--arrow-top', '-6px');
+        tooltip.style.setProperty('--arrow-rotate', '45deg');
+    };
+    applyArrowVars();
+
+    const show = (el, anchorX = null) => {
+        const payload = findDefinitionForStrong(el);
+        if (!payload) return;
+        activeEl = el;
+        activeAnchorX = typeof anchorX === 'number' ? anchorX : null;
+
+        tooltip.textContent = payload.def;
+        tooltip.classList.add('is-visible');
+        tooltip.setAttribute('aria-hidden', 'false');
+        placeTooltip(el, activeAnchorX);
+    };
+
+    const hide = () => {
+        activeEl = null;
+        activeAnchorX = null;
+        tooltip.classList.remove('is-visible');
+        tooltip.setAttribute('aria-hidden', 'true');
+    };
+
+    const onKeyDown = (e) => {
+        if (!(e instanceof KeyboardEvent)) return;
+        if (e.key === 'Escape') hide();
+    };
+
+    const enhanceStrongTerms = () => {
+        const roots = ROOT_SELECTORS.flatMap((sel) => Array.from(document.querySelectorAll(sel)));
+        const strongs = roots.flatMap((root) => Array.from(root.querySelectorAll('strong')));
+
+        strongs.forEach((strongEl) => {
+            if (!(strongEl instanceof HTMLElement)) return;
+            const payload = findDefinitionForStrong(strongEl);
+            if (!payload) return;
+
+            strongEl.classList.add('has-tooltip');
+            strongEl.setAttribute('tabindex', '0');
+            strongEl.setAttribute('aria-describedby', tooltipId);
+            strongEl.dataset.tooltipTerm = payload.term;
+
+            strongEl.addEventListener('mouseenter', (e) => {
+                if (e instanceof MouseEvent) show(strongEl, e.clientX);
+                else show(strongEl);
+            });
+            strongEl.addEventListener('mousemove', (e) => {
+                if (!(e instanceof MouseEvent)) return;
+                if (activeEl !== strongEl) return;
+                activeAnchorX = e.clientX;
+                placeTooltip(strongEl, activeAnchorX);
+            });
+            strongEl.addEventListener('mouseleave', () => {
+                if (activeEl === strongEl) hide();
+            });
+            strongEl.addEventListener('focus', () => show(strongEl));
+            strongEl.addEventListener('blur', () => {
+                if (activeEl === strongEl) hide();
+            });
+        });
+    };
+
+    window.addEventListener('scroll', () => {
+        if (activeEl) placeTooltip(activeEl, activeAnchorX);
+    }, { passive: true });
+    window.addEventListener('resize', () => {
+        if (activeEl) placeTooltip(activeEl, activeAnchorX);
+    });
+    window.addEventListener('keydown', onKeyDown);
+
+    enhanceStrongTerms();
 })();
 
 (() => {
@@ -212,11 +330,23 @@
             btn.setAttribute('aria-expanded', isActive ? 'true' : 'false');
         });
 
+        // Panel transition: unhide first, then apply .is-active on next frame
+        // so opacity/transform transitions can run.
+        const nextPanel = panels.find((p) => p.getAttribute('data-timeline-panel') === key) || null;
+
         panels.forEach((panel) => {
-            const isActive = panel.getAttribute('data-timeline-panel') === key;
-            panel.classList.toggle('is-active', isActive);
-            panel.hidden = !isActive;
+            if (panel === nextPanel) return;
+            panel.classList.remove('is-active');
+            panel.hidden = true;
         });
+
+        if (nextPanel) {
+            nextPanel.hidden = false;
+            nextPanel.classList.remove('is-active');
+            window.requestAnimationFrame(() => {
+                nextPanel.classList.add('is-active');
+            });
+        }
     };
 
     triggers.forEach((btn) => {
@@ -293,19 +423,6 @@
             yRange: [1, 9],
             yTick0: 1,
             yDtick: 1,
-        },
-        conditions: {
-            kind: 'conditions',
-            xLabel: 'Experimental conditions',
-            yLabel: 'Arousal change score',
-            x: ['N-LF', 'N-HF', 'P-LF', 'P-HF', 'Neutral', 'Silent'],
-            // Approximate values based on the figure's bar heights (no dots/error bars/significance).
-            y: [1.0, 1.1, 1.0, -0.6, -0.2, 0.0],
-            colors: [controlColor, musicColor, gold, plum, blue, pink],
-            yRange: [-6, 6],
-            yTick0: -6,
-            yDtick: 2,
-            zeroLine: true,
         },
     };
 
@@ -397,20 +514,6 @@
         );
     };
 
-    const fadeSwapTo = (key) => {
-        currentKey = key;
-
-        // Fade out, swap, then fade in.
-        plotEl.classList.add('is-fading');
-        window.setTimeout(() => {
-            window.Plotly.react(plotEl, buildData(key), buildLayout(key), config);
-            // Next tick: allow opacity to transition back.
-            window.requestAnimationFrame(() => {
-                plotEl.classList.remove('is-fading');
-            });
-        }, 220);
-    };
-
     const setActive = (key) => {
         const nextKey = key in states ? key : 'baseline';
         triggerEls.forEach((btn) => {
@@ -419,21 +522,12 @@
             btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
 
-        const nextState = getState(nextKey);
-        const currentState = getState(currentKey);
-
         if (!hasPlotted) {
             plotInitial(nextKey);
             return;
         }
 
-        const bothTwoBar = currentState.kind === 'twoBar' && nextState.kind === 'twoBar';
-        if (bothTwoBar) {
-            animateTwoBarTo(nextKey);
-            return;
-        }
-
-        fadeSwapTo(nextKey);
+        animateTwoBarTo(nextKey);
     };
 
     // Initialize with whichever trigger is marked active, otherwise baseline.
@@ -449,6 +543,88 @@
     });
 
     setActive(initialKey);
+})();
+
+(() => {
+    // R2 (new): arousal across experimental conditions (single plot).
+    const plotEl = document.getElementById('plot-r2');
+    if (!(plotEl instanceof HTMLElement)) return;
+    if (typeof window.Plotly === 'undefined') return;
+
+    const getVar = (name) =>
+        getComputedStyle(document.documentElement).getPropertyValue(name).trim() || undefined;
+
+    const text = getVar('--text') || '#2E2623';
+    const muted = getVar('--text-muted') || '#756A64';
+    const bg = getVar('--bg') || '#F7F2EA';
+    const musicColor = getVar('--teal') || '#5D8C87';
+    const controlColor = getVar('--apricot') || '#E5A97A';
+    const plum = getVar('--plum') || '#7A5C7B';
+    const gold = getVar('--gold') || '#D8C06A';
+    const blue = getVar('--blue') || '#4B86C7';
+    const pink = getVar('--pink') || '#D48AA8';
+
+    const state = {
+        xLabel: 'Experimental conditions',
+        yLabel: 'Arousal change score',
+        x: ['N-LF', 'N-HF', 'P-LF', 'P-HF', 'Neutral', 'Silent'],
+        // Approximate values based on the figure's bar heights (no dots/error bars/significance).
+        y: [1.0, 1.1, 1.0, -0.6, -0.2, 0.0],
+        colors: [controlColor, musicColor, gold, plum, blue, pink],
+        yRange: [-6, 6],
+        yTick0: -6,
+        yDtick: 2,
+        zeroLine: true,
+    };
+
+    const data = [
+        {
+            type: 'bar',
+            name: 'Arousal',
+            x: state.x,
+            y: state.y,
+            marker: {
+                color: state.colors,
+                line: { color: text, width: 1 },
+            },
+            hoverinfo: 'skip',
+        },
+    ];
+
+    const layout = {
+        margin: { l: 66, r: 12, t: 10, b: 62 },
+        paper_bgcolor: bg,
+        plot_bgcolor: bg,
+        font: { family: 'Switzer, sans-serif', color: text, size: 15 },
+        xaxis: {
+            title: { text: state.xLabel, font: { color: muted, size: 15 } },
+            tickfont: { color: text, size: 14 },
+            linecolor: text,
+            linewidth: 1,
+            showgrid: false,
+            zeroline: false,
+        },
+        yaxis: {
+            title: { text: state.yLabel, font: { color: muted, size: 15 } },
+            range: state.yRange,
+            tick0: state.yTick0,
+            dtick: state.yDtick,
+            tickfont: { color: text, size: 14 },
+            gridcolor: 'rgba(46,38,35,0.12)',
+            linecolor: text,
+            linewidth: 1,
+            zeroline: Boolean(state.zeroLine),
+            zerolinecolor: text,
+            zerolinewidth: 1,
+        },
+        showlegend: false,
+        hovermode: false,
+        bargap: 0.25,
+    };
+
+    const config = { displayModeBar: false, responsive: true };
+
+    window.Plotly.newPlot(plotEl, data, layout, config);
 })();
 
 (() => {
@@ -536,16 +712,16 @@
 })();
 
 (() => {
-    const plotEl = document.getElementById('plot-r2');
+    const plotEl = document.getElementById('plot-r3');
     if (!(plotEl instanceof HTMLElement)) return;
     if (typeof window.Plotly === 'undefined') return;
 
-    const triggerEls = Array.from(document.querySelectorAll('[data-r2-plot]')).filter(
+    const triggerEls = Array.from(document.querySelectorAll('[data-r3-plot]')).filter(
         (el) => el instanceof HTMLButtonElement
     );
 
-    const switchHost = document.querySelector('[data-r2-view-switch]');
-    const switchBtns = Array.from(document.querySelectorAll('[data-r2-view]')).filter(
+    const switchHost = document.querySelector('[data-r3-view-switch]');
+    const switchBtns = Array.from(document.querySelectorAll('[data-r3-view]')).filter(
         (el) => el instanceof HTMLButtonElement
     );
 
@@ -715,7 +891,7 @@
 
     const setActiveTrigger = (plotKey) => {
         triggerEls.forEach((btn) => {
-            const isActive = btn.getAttribute('data-r2-plot') === plotKey;
+            const isActive = btn.getAttribute('data-r3-plot') === plotKey;
             btn.classList.toggle('is-active', isActive);
             btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
@@ -731,7 +907,7 @@
         }
 
         switchBtns.forEach((btn) => {
-            const isActive = btn.getAttribute('data-r2-view') === nextKey;
+            const isActive = btn.getAttribute('data-r3-view') === nextKey;
             btn.classList.toggle('is-active', isActive);
             btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
@@ -819,7 +995,7 @@
 
     triggerEls.forEach((btn) => {
         btn.addEventListener('click', () => {
-            const key = btn.getAttribute('data-r2-plot');
+            const key = btn.getAttribute('data-r3-plot');
             if (!key) return;
             setActive(key);
         });
@@ -827,7 +1003,7 @@
 
     switchBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
-            const key = btn.getAttribute('data-r2-view');
+            const key = btn.getAttribute('data-r3-view');
             if (!key) return;
             const prev = setActiveView(key);
 
@@ -844,12 +1020,12 @@
 
     // Initialize: prefer any active trigger; otherwise, first.
     const initialPlotKey =
-        triggerEls.find((el) => el.classList.contains('is-active'))?.getAttribute('data-r2-plot') ||
-        triggerEls[0]?.getAttribute('data-r2-plot') ||
+        triggerEls.find((el) => el.classList.contains('is-active'))?.getAttribute('data-r3-plot') ||
+        triggerEls[0]?.getAttribute('data-r3-plot') ||
         'fig6';
 
     const initialViewKey =
-        switchBtns.find((el) => el.classList.contains('is-active'))?.getAttribute('data-r2-view') || 'target';
+        switchBtns.find((el) => el.classList.contains('is-active'))?.getAttribute('data-r3-view') || 'target';
     setActiveView(initialViewKey);
     setActive(initialPlotKey);
 })();

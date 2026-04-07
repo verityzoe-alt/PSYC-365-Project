@@ -1,4 +1,52 @@
 (() => {
+    // Site-wide reveal: mark sections/divs automatically, but keep the hero static.
+    const candidates = Array.from(document.querySelectorAll('section, div'));
+    candidates.forEach((el) => {
+        if (!(el instanceof HTMLElement)) return;
+
+        // Keep hero (and everything inside it) static.
+        if (el.closest('.hero')) return;
+
+        // Avoid revealing the tooltip element (it manages its own visibility).
+        if (el.classList.contains('tooltip')) return;
+
+        // If a dev already opted-in/out, respect explicit markup.
+        if (el.hasAttribute('data-reveal')) return;
+
+        el.setAttribute('data-reveal', '');
+    });
+
+    const revealEls = Array.from(document.querySelectorAll('[data-reveal]'));
+    if (!revealEls.length) return;
+
+    const reduceMotion =
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+
+    if (!('IntersectionObserver' in window)) {
+        revealEls.forEach((el) => el.classList.add('is-visible'));
+        return;
+    }
+
+    const io = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+            });
+        },
+        {
+            root: null,
+            threshold: 0.12,
+            rootMargin: '0px 0px -10% 0px',
+        }
+    );
+
+    revealEls.forEach((el) => io.observe(el));
+})();
+
+(() => {
     const root = document.querySelector('[data-carousel="intro"]');
     if (!(root instanceof HTMLElement)) return;
 
@@ -75,13 +123,36 @@
     const TERM_DEFS = new Map([
         ['emotional arousal hypothesis', 'The hypothesis that post-encoding emotional arousal trigger norepinephrine and cortisol release, which modulate memory via the hippocampus and basolateral amygdala.'],
         ['Yerkes-Dodson law', 'Cognitive performance peaks at moderate arousal but declines if arousal is too high or low, resembling an inverted U-shape curve.'],
-        ['pattern separation', 'A hippocampal process that keeps similar experiences distinct (supports detailed discrimination).'],
-        ['pattern completion', 'A process that fills in missing information to recognize something as familiar (supports gist/general recognition).'],
+        ['pattern separation', 'The hippocampal process of separating overlapping experiences into distinct memories.'],
+        ['pattern completion', 'The hippocampal process of reactivating a previous experience from a partial or degraded cue.'],
         ['mnemonic discrimination tasks (MDTs)', 'A long-term episodic memory task that include “lure” stimuli in the testing phase.'],
+        ['target recognition', 'Measured by a <em>discriminability index</em> ($d^\\prime$), calculated as $z($Hits$)$ − $z($False Alarms$)$.'],
+        ['lure discrimination', 'Measured by a <em>lure discrimination index</em> (LDI), calculated as $p($“New”|Lure$)$ − $p($“New”|Target$)$.'],
+        ['9x9 affect grid', 'Participants reported their subjective perception of their current emotional state by selecting a square on a $9\\times9$ grid, with the $x$-axis representing emotional valence ranging from unpleasant (1) to pleasant (9), and the $y$-axis representing emotional arousal ranging from low arousal (1; e.g., depression, sleepiness, relaxation) to high arousal (9; e.g., stress, excitement).'],
     ]);
+
+    const renderTooltipMath = () => {
+        const renderMathInElement = window.renderMathInElement;
+        if (typeof renderMathInElement !== 'function') return;
+
+        try {
+            renderMathInElement(tooltip, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true },
+                ],
+                throwOnError: false,
+            });
+        } catch {
+            // If KaTeX isn't available or parsing fails, keep plain text.
+        }
+    };
 
     const ROOT_SELECTORS = [
         '.intro-point p',
+        '.vars-list',
     ];
 
     const normalize = (text) =>
@@ -171,7 +242,8 @@
         activeEl = el;
         activeAnchorX = typeof anchorX === 'number' ? anchorX : null;
 
-        tooltip.textContent = payload.def;
+        tooltip.innerHTML = payload.def;
+        renderTooltipMath();
         tooltip.classList.add('is-visible');
         tooltip.setAttribute('aria-hidden', 'false');
         placeTooltip(el, activeAnchorX);
@@ -235,6 +307,48 @@
 })();
 
 (() => {
+    const host = document.querySelector('[data-site-menu]');
+    if (!(host instanceof HTMLElement)) return;
+
+    const toggle = host.querySelector('[data-menu-toggle]');
+    const menu = host.querySelector('#site-menu');
+    if (!(toggle instanceof HTMLButtonElement)) return;
+    if (!(menu instanceof HTMLElement)) return;
+
+    const setOpen = (next) => {
+        menu.classList.toggle('is-open', next);
+        toggle.setAttribute('aria-expanded', String(next));
+        toggle.setAttribute('aria-label', next ? 'Close menu' : 'Open menu');
+    };
+
+    const isOpen = () => menu.classList.contains('is-open');
+
+    toggle.addEventListener('click', () => setOpen(!isOpen()));
+
+    menu.addEventListener('click', (e) => {
+        const target = e.target;
+        if (!(target instanceof HTMLElement)) return;
+        if (target.closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!isOpen()) return;
+        const target = e.target;
+        if (!(target instanceof Node)) return;
+        if (host.contains(target)) return;
+        setOpen(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (!(e instanceof KeyboardEvent)) return;
+        if (e.key !== 'Escape') return;
+        if (!isOpen()) return;
+        setOpen(false);
+        toggle.focus();
+    });
+})();
+
+(() => {
     const cards = Array.from(document.querySelectorAll('[data-flip-card]'));
     if (cards.length === 0) return;
 
@@ -289,8 +403,8 @@
 
         const x1 = getPointCenterX('emotion1');
         const x2 = getPointCenterX('emotion2');
-        const x55 = getPointCenterX('marker55');
-        if (x1 == null || x2 == null || x55 == null) return;
+        const xRetrieval = getPointCenterX('retrieval');
+        if (x1 == null || x2 == null || xRetrieval == null) return;
 
         const left = Math.min(x1, x2);
         const right = Math.max(x1, x2);
@@ -306,7 +420,7 @@
         const surveysBracket = overlaysHost.querySelector('[data-overlay="surveys"]');
         if (surveysBracket instanceof HTMLElement) {
             const surveysLeft = x1;
-            const surveysRight = x55;
+            const surveysRight = xRetrieval;
             const width = Math.max(0, surveysRight - surveysLeft);
             const inset = 8;
             surveysBracket.style.left = `${surveysLeft + inset}px`;

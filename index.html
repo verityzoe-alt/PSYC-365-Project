@@ -11,6 +11,15 @@
         content="Fine-Tuning the Details: Post-encoding Music Differentially Impacts General and Detailed Memory — Kayla R. Clark and Stephanie L. Leal" />
 
     <link rel="stylesheet" href="main.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+        integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+        integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg"
+        crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+        integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk"
+        crossorigin="anonymous"></script>
     <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
     <script defer src="main.js"></script>
 </head>
@@ -28,11 +37,11 @@
         </section>
 
         <!-- intro / previous research -->
-        <section class="intro" aria-label="Paper intro">
+        <section class="intro" aria-label="Paper intro" data-reveal>
             <!-- left div: 40% of full screen/viewport, heading (centered within div), font-heading, one of the colors from the global vars i'm not sure which -->
             <div class="intro-aside">
                 <img class="intro-aside-graphic" src="./img/Sleep music.png" alt="Illustration of a bear resting" />
-                <h2 class="intro-heading">I. PREVIOUS RESEARCH</h2>
+                <h2 class="intro-heading">I. RATIONALE</h2>
             </div>
 
             <!-- right div: remaning 60% of viewport, content consisting of bullet points of facts. i want this to be a like a vertical carousel of bullet points, so scrolling = loading the next bullet point. can either have pagination buttons or up/down arrows -->
@@ -79,7 +88,7 @@
         </section>
 
         <!-- big question -->
-        <section class="big-question" aria-label="Paper big question">
+        <section class="big-question" aria-label="Paper big question" data-reveal>
             <div class="container big-question-inner">
                 <p class="big-question-kicker">Big picture question:</p>
                 <blockquote class="big-question-quote">
@@ -260,16 +269,15 @@
                     <div class="timeline-panel" id="timeline-panel" role="region" aria-live="polite">
                         <div class="timeline-detail is-active" data-timeline-panel="arrival">
                             <h3 class="timeline-title">Participant arrives</h3>
-                            <p class="timeline-text">130 Rice University Students, aged 18-35, arrive for the session
-                                and begin the study procedure.
+                            <p class="timeline-text">The study consisted of 130 Rice University undergraduate students
+                                aged 18-35.
                             </p>
                         </div>
 
                         <div class="timeline-detail" data-timeline-panel="encoding" hidden>
                             <h3 class="timeline-title">Encoding phase</h3>
                             <p class="timeline-text"> Participants viewed 128 images of common household objects and
-                                classified them as "indoor" or "outdoor" to ensure incidental learning, this is the
-                                inital learning task.
+                                classified them as "indoor" or "outdoor" for incidental encoding.
                             </p>
                         </div>
 
@@ -288,42 +296,40 @@
 
                         <div class="timeline-detail" data-timeline-panel="music" hidden>
                             <h3 class="timeline-title">Music intervention (10 min)</h3>
-                            <p class="timeline-text"> While completing the first self-assessment survey, they listened
-                                to one of six acoustic conditions (see IVs below) for 10 minutes. After 10 min,
-                                participants continued completing surveys in silence for an additional 20 min to
-                                allow for emotional arousal to dissipate before the retrieval
-                                phase.</p>
+                            <p class="timeline-text"> During the first 10 min after encoding, participants listened to
+                                music, sound, or silence that corresponded to their assigned experimental condition (see
+                                IVs below).</p>
                         </div>
 
                         <div class="timeline-detail" data-timeline-panel="surveys" hidden>
                             <h3 class="timeline-title">Surveys (30 min)</h3>
-                            <p class="timeline-text">Participants continued surveys in silence to allow arousal to
-                                dissipate.
+                            <p class="timeline-text">Participants completed surveys for 30 min before retrieval, with
+                                music (according to the condition) played in the first 10 min and silence in the last 20
+                                min to allow arousal to dissipate.
                             </p>
                         </div>
 
                         <div class="timeline-detail" data-timeline-panel="retrieval" hidden>
                             <h3 class="timeline-title">Retrieval phase</h3>
-                            <p class="timeline-text">Participants performed a Mnemonic Discrimination Task (MDT), a
-                                memory assesment, where they viewed 192 images (some identical to the first phase
-                                “targets”, some similar "lures," and some entirely new "foils") and identified them as
-                                "Old" or "New".</p>
+                            <p class="timeline-text">Participants viewed 192 images that were either identical to the
+                                first phase “targets”, similar "lures," or entirely new "foils". As an MDT task,
+                                participants were
+                                to identify them as "Old" or "New".</p>
                         </div>
 
                         <div class="timeline-detail" data-timeline-panel="musicRating" hidden>
                             <h3 class="timeline-title">Music-rating task</h3>
-                            <p class="timeline-text">Participants completed a task where they provided subjective
-                                ratings for the specific music or sounds they had heard during the intervention. They
-                                evaluated these stimuli across four key dimensions: emotional arousal, emotional
+                            <p class="timeline-text">Participants rated the music or sounds heard during the
+                                intervention across four key dimensions: emotional arousal, emotional
                                 valence, familiarity, and pleasantness.
                             </p>
                         </div>
 
                         <div class="timeline-detail" data-timeline-panel="finalSurveys" hidden>
                             <h3 class="timeline-title">Surveys</h3>
-                            <p class="timeline-text">To conclude the session, participants completed final
-                                questionnaires that assessed their musical background, specifically focusing on their
-                                musical expertise and how they typically engage with music in their daily lives.
+                            <p class="timeline-text">Participants completed final questionnaires that assessed their
+                                musical background, specifically focusing on their musical expertise and how they
+                                typically engage with music in their daily lives.
                             </p>
                         </div>
                     </div>
@@ -341,6 +347,8 @@
                         </li>
                         <li>1 <strong>neutral sound</strong> condition.</li>
                         <li>1 <strong>silent</strong> condition.</li>
+                        <li>In the music conditions, classical musical pieces that varied
+                            across the extra-musical features of interest were selected.</li>
                     </ul>
                 </div>
 
@@ -352,7 +360,8 @@
                         <li><strong>target recognition: </strong> measure of general memory for repeated images.</li>
                         <li><strong>lure discrimination: </strong> measure of detailed memory to discriminate between
                             "old" and "new" images. </li>
-                        <li><strong>emotional arousal: </strong> measured by the use of a 9x9 affect grid. </li>
+                        <li><strong>emotional arousal: </strong> measured by the use of a <strong> 9x9 affect
+                                grid</strong>. </li>
 
                     </ul>
                 </div>
@@ -403,8 +412,7 @@
                             <button class="results-block results-block-trigger" type="button" role="listitem"
                                 data-r1-plot="post" aria-pressed="false">
                                 <p class="results-block-text">Post-treatment, the music group showed significantly
-                                    higher arousal than control. So yes, music appears to have induced emotional
-                                    arousal!</p>
+                                    higher arousal than control.</p>
                                 <span class="results-block-cta" aria-hidden="true"></span>
                             </button>
                         </div>
@@ -723,12 +731,50 @@
             </div>
         </section>
 
+        <section class="citation" aria-label="Citation">
+            <div class="discussion-inner">
+                <div class="citation-text" aria-label="APA citation">
+                    <p class="citation-heading">References</p>
+                    <p class="citation-line">
+                        Clark, K. R., &amp; Leal, S. L. (2025). Fine-Tuning the Details: Post-encoding Music
+                        Differentially Impacts General and Detailed Memory. <em>Journal of Neuroscience</em>,
+                        <em>45</em>(31). <a class="citation-link" href="https://doi.org/10.1523/JNEUROSCI.0158-25.2025"
+                            target="_blank" rel="noreferrer noopener">
+                            https://doi.org/10.1523/JNEUROSCI.0158-25.2025
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="ai-declaration" aria-label="AI declaration">
+            <div class="discussion-inner">
+                <div class="ai-declaration-box">
+                    <p class="ai-declaration-text">
+                        <strong>AI declaration:</strong> We used GitHub Copilot (GPT-5.2) for
+                        front-end implementation (HTML/CSS/JS) in building the website!
+                    </p>
+                </div>
+            </div>
+        </section>
+
         <!-- image test -->
         <!-- <section class="image-test" aria-label="Image test">
             <div class="image-test-inner">
                 <img class="image-test-img" src="./img/bear1.png" alt="Test image" />
             </div>
         </section> -->
+
+        <footer class="site-footer" aria-label="Footer">
+            <div class="discussion-inner site-footer-inner">
+                <div class="site-footer-left">
+                    <p> June Nguyen <br> Verity Leong </p>
+                </div>
+                <div class="site-footer-right">
+                    <p> PSYC 365 <br> April 7, 2026</p>
+                </div>
+            </div>
+        </footer>
 
     </main>
 </body>
